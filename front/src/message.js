@@ -5,14 +5,14 @@ import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import RestoreIcon from '@material-ui/icons/Restore';
 
-class Settings extends React.Component {
+class Message extends React.Component {
   constructor() {
     super();
   }
 
   render() {
-    return <div>THIS IS SETTINGS</div>;
+    return <div>THIS IS MESSAGES</div>;
   }
 }
 
-export default Settings;
+export default Message;

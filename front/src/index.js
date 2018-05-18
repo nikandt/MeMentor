@@ -7,6 +7,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import MessageIcon from '@material-ui/icons/Message';
 import SettingsIcon from '@material-ui/icons/Settings';
 import Settings from './settings';
+import Message from './message';
 
 class App extends React.Component {
   constructor() {
@@ -19,6 +20,8 @@ class App extends React.Component {
   renderPage() {
     if (this.state.page === 'index') {
       return <div>THIS IS MAIN PAGE</div>;
+    } else if (this.state.page === 'message') {
+      return <Message />;
     } else {
       return <Settings />;
     }
@@ -34,17 +37,17 @@ class App extends React.Component {
         {this.renderPage()}
         <BottomNavigation onChange={(event, value) => this.switchPage(value)}>
           <BottomNavigationAction
-            value="otherpage"
+            value="index"
             label="aaaa"
             icon={<HomeIcon />}
           />
           <BottomNavigationAction
-            value="otherpage"
+            value="message"
             label="bbbb"
             icon={<MessageIcon />}
           />
           <BottomNavigationAction
-            value="otherpage"
+            value="settings"
             label="cccc"
             icon={<SettingsIcon />}
           />
