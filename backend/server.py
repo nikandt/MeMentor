@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+from bson.json_util import dumps
 
 class server:
   def __init__(self):
@@ -9,16 +10,15 @@ class server:
     self.userCollection = self.db["user_collection"]
 
   def addUser(self, name):
-    post = {"author": name,}
-
-    print( self.userCollection.posts.insert_one(post).inserted_id )
+    post = {"author": name,
+            "skills": [],
+            "interests": []}
+    print( self.userCollection.users.insert_one(post).inserted_id )
     return "jee"
 
+  def addSkill(self, name):
+    post = {"author": name,}
+    return self.userCollection.skills.insert_one(post).inserted_id
+
   def getUsers(self):
-    ret = []
-    cursor = self.userCollection.posts.find()
-    print(cursor)
-    for user in cursor:
-      print(user)
-      ret.append( user['author'] )
-    return ", ".join(ret)
+    return dumps( self.userCollection.users.find() )
