@@ -6,6 +6,9 @@ import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import HomeIcon from '@material-ui/icons/Home';
 import MessageIcon from '@material-ui/icons/Message';
 import SettingsIcon from '@material-ui/icons/Settings';
+import AppBar from '@material-ui/core/AppBar';
+import Typography from '@material-ui/core/Typography';
+import Toolbar from '@material-ui/core/Toolbar';
 import Settings from './settings';
 import Message from './message';
 
@@ -17,9 +20,27 @@ class App extends React.Component {
     };
   }
 
+  callJebuliinas() {
+    fetch('http://localhost:5000/getUsers').then(function(response) {
+      return response.json();
+    });
+  }
+
   renderPage() {
     if (this.state.page === 'index') {
-      return <div>THIS IS MAIN PAGE</div>;
+      return (
+        <div>
+          {' '}
+          <AppBar position="static" color="default">
+            <Toolbar>
+              <Typography variant="title" color="inherit">
+                Matches
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          {this.callJebuliinas()}
+        </div>
+      );
     } else if (this.state.page === 'message') {
       return <Message />;
     } else {
