@@ -18,7 +18,6 @@ import Fade from '@material-ui/core/Fade';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import { MYID } from './message';
 
 class Chat extends React.Component {
   constructor(props) {
@@ -43,8 +42,8 @@ class Chat extends React.Component {
     fetch('http://localhost:5000/getconversation', {
       method: 'POST',
       body: JSON.stringify({
-        userA: MYID,
-        userB: this.props.userId
+        userA: this.props.userId,
+        userB: this.props.partnerId
       }),
       headers: new Headers({
         'Content-Type': 'application/json'
@@ -54,8 +53,10 @@ class Chat extends React.Component {
         return response.json();
       })
       .then(obj => {
-        const me = MYID === obj.userA._id.$oid ? obj.userA : obj.userB;
-        const other = MYID === obj.userA._id.$oid ? obj.userB : obj.userA;
+        const me =
+          this.props.userId === obj.userA._id.$oid ? obj.userA : obj.userB;
+        const other =
+          this.props.userId === obj.userA._id.$oid ? obj.userB : obj.userA;
         this.setState({
           messages: obj.messages,
           me: me,
@@ -114,8 +115,8 @@ class Chat extends React.Component {
               fetch('http://localhost:5000/addmessage', {
                 method: 'POST',
                 body: JSON.stringify({
-                  userA: MYID,
-                  userB: this.props.userId,
+                  userA: this.props.userId,
+                  userB: this.props.partnerId,
                   time: 420,
                   text: event.target.value
                 }),
