@@ -55,7 +55,18 @@ class server:
     return dumps( self.userCollection.conversations.find() )
 
   def getConversation(self, mongoid):
-    return dumps(self.userCollection.conversations.find_one({"_id": ObjectId(mongoid)}))
+    ret = {}
+    convo = self.userCollection.conversations.find_one({"_id": ObjectId(mongoid)})
+    ret["A"] = convo["userA"]
+    ret["B"] = convo["userB"]
+    ret["messages"] = []
+    for m in convo["messages"]:
+      ret["messages"].append(self.getMessage(m))
+    return dumps(ret)
+
+  def getMessage(self, messageid):
+    return self.userCollection.messages.find_one({"_id": ObjectId(messageid)})
+
 
   def addMessage(self, chatid, fields):
     newmessage = message()
