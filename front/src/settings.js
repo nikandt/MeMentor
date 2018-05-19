@@ -19,7 +19,9 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import Divider from '@material-ui/core/Divider';
+
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
@@ -33,6 +35,7 @@ const styles = theme => ({
     display: 'flex',
     flexWrap: 'wrap'
   },
+
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
@@ -46,6 +49,12 @@ const styles = theme => ({
   },
   chip: {
     margin: theme.spacing.unit
+  },
+  paper: {
+    padding: theme.spacing.unit * 2,
+    textAlign: 'center',
+
+    color: theme.palette.text.secondary
   }
 });
 
@@ -70,17 +79,17 @@ function handleDelete(userid) {
     })
     .catch(error => console.error('Error:', error))
     .then(response => console.log('Success:', response));
-  /*.then(obj => {
-      this.setState({
-        loading: false,
-        users: obj
-      });
-    });*/
+}
+
+function getUser() {
+  console.log('Getting user...');
 }
 
 class Settings extends React.Component {
   constructor() {
     super();
+
+    getUser();
 
     this.state = {
       email: '',
@@ -107,116 +116,165 @@ class Settings extends React.Component {
     event.preventDefault();
   }
 
-  render() {
-    const { classes } = this.props;
+  renderTopbar() {
+    return (
+      <AppBar position="static" color="default">
+        <Toolbar>
+          <Typography variant="title" color="inherit">
+            Settings
+          </Typography>
+        </Toolbar>
+      </AppBar>
+    );
+  }
 
+  renderUserSettings() {
+    const { classes } = this.props;
+    return (
+      <Paper className={classes.paper}>
+        <Typography variant="title" gutterBottom>
+          User settings
+        </Typography>
+
+        <Grid container spacing={24}>
+          <Grid
+            container
+            item
+            xs={12}
+            sm={12}
+            justify="center"
+            alignItems="center"
+          >
+            <Avatar alt={this.state.username} src={this.state.imageurl} />
+          </Grid>
+          <Grid item xs={12} sm={12}>
+            <input
+              accept="image/*"
+              className={classes.input}
+              id="button-file"
+              multiple
+              type="file"
+            />
+            <label htmlFor="button-file">
+              <Button variant="raised" component="span" className="photos">
+                Change photo
+              </Button>
+            </label>
+          </Grid>
+
+          <Grid item xs={12} sm={12}>
+            <FormControl
+              className={classNames(classes.margin, classes.textField)}
+            >
+              <TextField
+                label="Username"
+                id="margin-none"
+                defaultValue="John"
+                className="container"
+                /* onChange={handleChange('username')}*/
+              />
+              <TextField
+                label="E-mail"
+                id="margin-none"
+                defaultValue="john@doe.com"
+                className="container"
+              />
+            </FormControl>
+            <FormControl
+              className={classNames(classes.margin, classes.textField)}
+            >
+              <InputLabel htmlFor="password">Password</InputLabel>
+              <Input
+                id="password"
+                type={this.state.showPassword ? 'text' : 'password'}
+                value={this.state.password}
+                onChange={this.handleChange('password')}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="Toggle password visibility"
+                      onClick={this.handleClickShowPassword}
+                      onMouseDown={this.handleMouseDownPassword}
+                    >
+                      {this.state.showPassword ? (
+                        <VisibilityOff />
+                      ) : (
+                        <Visibility />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+          </Grid>
+        </Grid>
+      </Paper>
+    );
+  }
+
+  renderUserSkills() {
+    const { classes } = this.props;
+    return (
+      <Paper className={classes.paper}>
+        <Typography variant="title" gutterBottom>
+          Skills you know
+        </Typography>
+        <Chip
+          label="Gardening"
+          onClick={handleClick}
+          onDelete={handleDelete}
+          className={classes.chip}
+        />
+        <br />
+        <InputLabel htmlFor="input-with-icon-adornment">Add skill</InputLabel>
+        <Input id="input-with-icon-adornment2" />
+      </Paper>
+    );
+  }
+
+  renderUserInterests() {
+    const { classes } = this.props;
+    return (
+      <Paper className={classes.paper}>
+        <Typography variant="title" gutterBottom>
+          Interests
+        </Typography>
+        <Chip
+          label="Scala"
+          onClick={handleClick}
+          onDelete={handleDelete}
+          className={classes.chip}
+        />
+        <Chip
+          label="Python"
+          onClick={handleClick}
+          onDelete={handleDelete}
+          className={classes.chip}
+        />
+        <br />
+        <InputLabel htmlFor="input-with-icon-adornment">
+          Add interest
+        </InputLabel>
+        <Input id="input-with-icon-adornment" />
+      </Paper>
+    );
+  }
+
+  renderApplicationPreferences() {
+    // TODO: implement
+  }
+
+  render() {
     return (
       <div>
-        <AppBar position="static" color="default">
-          <Toolbar>
-            <Typography variant="title" color="inherit">
-              Settings
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <div className="">
-          <br />
-          <Typography variant="title" gutterBottom>
-            User settings
-          </Typography>
-          <Avatar alt={this.state.username} src={this.state.imageurl} />
-          <input
-            accept="image/*"
-            className={classes.input}
-            id="button-file"
-            multiple
-            type="file"
-          />
-          <label htmlFor="button-file">
-            <Button variant="raised" component="span" className="photos">
-              Upload
-            </Button>
-          </label>
+        {this.renderTopbar()}
 
-          <FormControl
-            className={classNames(classes.margin, classes.textField)}
-          >
-            <TextField
-              label="Username"
-              id="margin-none"
-              defaultValue="John"
-              className="container"
-              /* onChange={handleChange('username')}*/
-            />
-            <TextField
-              label="E-mail"
-              id="margin-none"
-              defaultValue="john@doe.com"
-              className="container"
-            />
-          </FormControl>
-          <FormControl
-            className={classNames(classes.margin, classes.textField)}
-          >
-            <InputLabel htmlFor="password">Password</InputLabel>
-            <Input
-              id="password"
-              type={this.state.showPassword ? 'text' : 'password'}
-              value={this.state.password}
-              onChange={this.handleChange('password')}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="Toggle password visibility"
-                    onClick={this.handleClickShowPassword}
-                    onMouseDown={this.handleMouseDownPassword}
-                  >
-                    {this.state.showPassword ? (
-                      <VisibilityOff />
-                    ) : (
-                      <Visibility />
-                    )}
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-          </FormControl>
+        <div id="settingscontainer">
+          {this.renderUserSettings()}
 
-          <br />
-          <Typography variant="title" gutterBottom>
-            Skills you know
-          </Typography>
-          <Chip
-            label="Gardening"
-            onClick={handleClick}
-            onDelete={handleDelete}
-            className={classes.chip}
-          />
-          <br />
-          <InputLabel htmlFor="input-with-icon-adornment">Add skill</InputLabel>
-          <Input id="input-with-icon-adornment2" />
-          <br />
-          <br />
-          <Typography variant="title" gutterBottom>
-            Interests
-          </Typography>
-          <Chip
-            label="Scala"
-            onClick={handleClick}
-            onDelete={handleDelete}
-            className={classes.chip}
-          />
-          <Chip
-            label="Python"
-            onClick={handleClick}
-            onDelete={handleDelete}
-            className={classes.chip}
-          />
-          <br />
-          <InputLabel htmlFor="input-with-icon-adornment">
-            Add interest
-          </InputLabel>
-          <Input id="input-with-icon-adornment" />
+          {this.renderUserSkills()}
+
+          {this.renderUserInterests()}
         </div>
       </div>
     );
