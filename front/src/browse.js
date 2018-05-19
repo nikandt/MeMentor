@@ -17,13 +17,16 @@ import IconButton from '@material-ui/core/IconButton';
 import Fade from '@material-ui/core/Fade';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 
 class Browse extends React.Component {
   constructor() {
     super();
     this.state = {
       loading: true,
-      users: []
+      users: [],
+      displayedUserIndex: 0
     };
   }
 
@@ -46,10 +49,22 @@ class Browse extends React.Component {
         <Avatar
           alt={user.name}
           src={user.imageURL || 'http://zumba.com'}
-          style={{ width: 256, height: 256 }}
+          style={{ width: '100%', height: 'auto' }}
         />
         <Typography variant="title" color="inherit">
           {user.name}
+
+          <IconButton aria-label="Message">
+            <CommentIcon />
+          </IconButton>
+        </Typography>
+        <Typography variant="title" color="inherit">
+          <i>Skills </i>
+          {user.skills.join(', ')}
+        </Typography>
+        <Typography variant="title" color="inherit">
+          <i>Interests </i>
+          {user.interests.join(', ')}
         </Typography>
       </div>
     );
@@ -70,7 +85,36 @@ class Browse extends React.Component {
         </Fade>
       );
     } else if (this.state.users.length > 0) {
-      return this.renderUser(this.state.users[0]);
+      const user = this.state.users[
+        this.state.displayedUserIndex % this.state.users.length
+      ];
+      return (
+        <Grid container>
+          <Grid container xs={2} alignItems="center">
+            <IconButton
+              onClick={() =>
+                this.setState(prevState => ({
+                  displayedUserIndex: prevState.displayedUserIndex - 1
+                }))
+              }
+            >
+              <KeyboardArrowLeft />
+            </IconButton>
+          </Grid>
+          <Grid xs={8}>{this.renderUser(user)}</Grid>
+          <Grid container xs={2} alignItems="center">
+            <IconButton
+              onClick={() =>
+                this.setState(prevState => ({
+                  displayedUserIndex: prevState.displayedUserIndex + 1
+                }))
+              }
+            >
+              <KeyboardArrowRight />
+            </IconButton>
+          </Grid>
+        </Grid>
+      );
     } else {
       return (
         <Typography variant="body1" color="inherit">
