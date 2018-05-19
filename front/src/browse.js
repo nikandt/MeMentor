@@ -26,7 +26,7 @@ class Browse extends React.Component {
     this.state = {
       loading: true,
       users: [],
-      displayedUserIndex: 0
+      displayedUserIndex: 10000
     };
   }
 
