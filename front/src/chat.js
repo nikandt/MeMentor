@@ -30,7 +30,16 @@ class Chat extends React.Component {
     };
   }
 
+  componentWillUnmount() {
+    clearInterval(this.updateTimer);
+  }
+
   componentDidMount() {
+    this.tick();
+    this.updateTimer = setInterval(this.tick.bind(this), 1000);
+  }
+
+  tick() {
     fetch('http://localhost:5000/getconversation', {
       method: 'POST',
       body: JSON.stringify({

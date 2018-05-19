@@ -84,8 +84,7 @@ class server:
     if (not convo):
         convo = self.userCollection.conversations.find_one({"userA": ret["userB"], "userB": ret["userA"]})
     if (convo):
-      for m in convo["messages"]:
-        ret["messages"].append(self.getMessage(m))
+      ret["messages"] = list(self.userCollection.messages.find({"conversation": str(convo["_id"])}))
       return dumps(ret)
     else:
       return self.addConversation(ret)
