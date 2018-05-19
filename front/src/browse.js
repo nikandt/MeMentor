@@ -45,7 +45,7 @@ class Browse extends React.Component {
 
   renderUser(user) {
     return (
-      <div>
+      <div style={{ height: 'calc(100vh - 70px)' }}>
         <Avatar
           alt={user.name}
           src={user.imageURL || 'http://zumba.com'}
