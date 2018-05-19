@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
 import Settings from './settings';
 import Message from './message';
+import Browse from './browse';
 
 class App extends React.Component {
   constructor() {
@@ -20,26 +21,9 @@ class App extends React.Component {
     };
   }
 
-  static callJebuliinas() {
-    fetch('http://localhost:5000/getUsers').then(function(response) {
-      return response.json();
-    });
-  }
-
   renderPage() {
     if (this.state.page === 'index') {
-      return (
-        <div>
-          <AppBar position="static" color="default">
-            <Toolbar>
-              <Typography variant="title" color="inherit">
-                Matches
-              </Typography>
-            </Toolbar>
-          </AppBar>
-          {App.callJebuliinas()}
-        </div>
-      );
+      return <Browse />;
     } else if (this.state.page === 'message') {
       return <Message />;
     } else {
