@@ -19,42 +19,45 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 
 class Message extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       loading: true,
-      users: []
+      conversations: []
     };
   }
 
   componentDidMount() {
-    fetch('http://localhost:5000/getusers')
+    fetch('http://localhost:5000/getconversations')
       .then(response => {
         return response.json();
       })
       .then(obj => {
         this.setState({
           loading: false,
-          users: obj
+          conversations: obj
         });
       });
   }
 
-  renderUser(user) {
+  renderConversation(conv) {
+    const otherUser = conv.userB; // TODO
     return (
-      <ListItem key={user.name} button>
-        <Avatar alt={user.name} src={user.imageURL || 'http://zumba.com'} />
-        <ListItemText primary={user.name} />
-        <ListItemSecondaryAction>
-          <IconButton aria-label="Message">
-            <CommentIcon />
-          </IconButton>
-        </ListItemSecondaryAction>
+      <ListItem
+        key={otherUser}
+        button
+        onClick={() => this.props.onOpenChat(otherUser)}
+      >
+        <Avatar
+          alt={otherUser}
+          src={otherUser /*.imageURL*/ || 'http://zumba.com'}
+        />
+        <ListItemText primary={otherUser} secondary={conv.messages[0]} />
       </ListItem>
     );
   }
 
-  renderUsers() {
+  renderConversations() {
     if (this.state.loading) {
       return (
         <Fade
@@ -68,12 +71,16 @@ class Message extends React.Component {
           <CircularProgress style={{ marginLeft: '50%', left: -20, top: 10 }} />
         </Fade>
       );
-    } else if (this.state.users.length > 0) {
-      return <List>{this.state.users.map(this.renderUser)}</List>;
+    } else if (this.state.conversations.length > 0) {
+      return (
+        <List>
+          {this.state.conversations.map(this.renderConversation.bind(this))}
+        </List>
+      );
     } else {
       return (
         <Typography variant="body1" color="inherit">
-          You have no matches. Please purchase our premium subscription
+          No conversations. Find someone!
         </Typography>
       );
     }
@@ -91,7 +98,7 @@ class Message extends React.Component {
         </AppBar>
         <Grid container spacing={24}>
           <Grid item xs={12}>
-            {this.renderUsers()}
+            {this.renderConversations()}
           </Grid>
         </Grid>
       </div>

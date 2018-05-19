@@ -21,11 +21,22 @@ class App extends React.Component {
     };
   }
 
+  openChat(userId) {
+    this.setState({
+      page: 'chat',
+      chatPartner: userId
+    });
+
+    console.log('open chat with ' + userId);
+  }
+
   renderPage() {
     if (this.state.page === 'index') {
-      return <Browse />;
+      return <Browse onOpenChat={userId => this.openChat(userId)} />;
     } else if (this.state.page === 'message') {
-      return <Message />;
+      return <Message onOpenChat={userId => this.openChat(userId)} />;
+    } else if (this.state.page === 'chat') {
+      return <h1>TODO chat with {this.state.chatPartner}</h1>;
     } else {
       return <Settings />;
     }
