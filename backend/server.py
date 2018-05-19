@@ -8,6 +8,7 @@ userModel = user()
 
 class server:
   def __init__(self):
+    self.users = {}
     self.port = 27017
     #jebujebunsalasanaananas
     self.client = MongoClient("mongodb+srv://jebujebu:jebujebunsalasanaananas@junctiontsinghua-rfzol.mongodb.net/test")
@@ -15,8 +16,10 @@ class server:
     self.userCollection = self.db["user_collection"]
 
   def addUser(self, fields):
-    if (userModel.checkDict(fields)):
-      self.userCollection.users.insert_one(fields).inserted_id
+    newuser = user()
+    if (newuser.checkDict(fields)):
+      newuser.setid( self.userCollection.users.insert_one(fields).inserted_id )
+      self.users[newuser.id] = newuser
       return "jee"
     else:
       return ";:<"
@@ -25,16 +28,37 @@ class server:
     if (userModel.checkField(new)):
       old = self.userCollection.users.find_one({ "_id": ObjectId(mongoid) })
       fields = {**old, **new}
-      print(fields)
       self.userCollection.users.update({ "_id": ObjectId(mongoid) },fields)
       return "jee"
     else:
       return ";:<"
 
+  def getUsers(self):
+    return dumps( self.userCollection.users.find() )
+
+  def addConversation(self, fields):
+    newuser = user()
+    if (newuser.checkDict(fields)):
+      newuser.setid( self.userCollection.users.insert_one(fields).inserted_id )
+      self.users[newuser.id] = newuser
+      return "jee"
+    else:
+      return ";:<"
+
+  def updateConversation(self, mongoid, new):
+    if (userModel.checkField(new)):
+      old = self.userCollection.users.find_one({ "_id": ObjectId(mongoid) })
+      fields = {**old, **new}
+      self.userCollection.users.update({ "_id": ObjectId(mongoid) },fields)
+      return "jee"
+    else:
+      return ";:<"
+
+  def getConversation(self):
+    return dumps( self.userCollection.users.find() )
+
+
 
   def addSkill(self, name):
     post = {"name": name,}
     return self.userCollection.skills.insert_one(post).inserted_id
-
-  def getUsers(self):
-    return dumps( self.userCollection.users.find() )

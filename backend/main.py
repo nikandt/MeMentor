@@ -15,15 +15,28 @@ def hello():
 @app.route('/adduser', methods=['POST'])
 def add_user():
     content = request.get_json(silent=True)
-    print(content)
     return S.addUser( content )
 
 @app.route('/updateuser/<mongoid>', methods=['POST'])
 def update_user(mongoid):
     content = request.get_json(silent=True)
-    print(content)
     return S.updateUser( mongoid, content )
 
 @app.route("/getusers", methods=['GET'])
 def get_users():
   return S.getUsers()
+
+
+@app.route('/addconversation', methods=['POST'])
+def add_conversation():
+    content = request.get_json(silent=True)
+    return S.addConversation( content )
+
+@app.route('/updateconversation/<mongoid>', methods=['POST'])
+def update_conversation(mongoid):
+    content = request.get_json(silent=True)
+    return S.updateConversation( mongoid, content )
+
+@app.route("/getconversation/<mongoid>", methods=['GET'])
+def get_conversation(mongoid):
+  return S.getConversation()
