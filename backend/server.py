@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 from bson.json_util import dumps
+from bson.objectid import ObjectId
 
 from user import user
 
@@ -13,15 +14,23 @@ class server:
     self.db = self.client['test']
     self.userCollection = self.db["user_collection"]
 
-  def checkUserEntry(self, entry):
-    return userModel.checkDict(entry)
-
   def addUser(self, fields):
-    if (self.checkUserEntry(fields)):
+    if (userModel.checkDict(fields)):
       self.userCollection.users.insert_one(fields).inserted_id
       return "jee"
     else:
       return ";:<"
+
+  def updateUser(self, mongoid, new):
+    if (userModel.checkField(new)):
+      old = self.userCollection.users.find_one({ "_id": ObjectId(mongoid) })
+      fields = {**old, **new}
+      print(fields)
+      self.userCollection.users.update({ "_id": ObjectId(mongoid) },fields)
+      return "jee"
+    else:
+      return ";:<"
+
 
   def addSkill(self, name):
     post = {"name": name,}

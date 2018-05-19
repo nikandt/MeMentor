@@ -12,6 +12,9 @@ class user:
       "interests": self.skillCheck,
     }
 
+  def checkField(self, entry):
+    return entry.keys() < self.checks.keys()
+
   def checkDict(self, entry):
     print(entry, self.checks)
     return all ( k in entry for k in self.checks.keys() ) and all( self.checks[k](entry[k]) for k in entry)
