@@ -19,6 +19,11 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+
+import Tooltip from '@material-ui/core/Tooltip';
+import AddIcon from '@material-ui/icons/Add';
 
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -35,7 +40,9 @@ const styles = theme => ({
     display: 'flex',
     flexWrap: 'wrap'
   },
-
+  helptext: {
+    margin: theme.spacing.unit
+  },
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
@@ -62,54 +69,131 @@ function handleClick() {
   alert('You clicked the Chip.'); // eslint-disable-line no-alert
 }
 
-function handleDelete(userid) {
-  console.log('You deleted the Chip.'); // eslint-disable-line no-alert
-
-  const data = { skills: ['jebubu'] };
-
-  fetch('http://localhost:5000/updateuser/5affcc26afdada4e1c475ee9', {
-    method: 'POST',
-    body: JSON.stringify(data),
-    headers: new Headers({
-      'Content-Type': 'application/json'
-    })
-  })
-    .then(response => {
-      return response.json();
-    })
-    .catch(error => console.error('Error:', error))
-    .then(response => console.log('Success:', response));
-}
-
-function getUser() {
-  console.log('Getting user...');
-}
-
 class Settings extends React.Component {
   constructor() {
     super();
 
-    getUser();
+    // Leikisti autentikoitiin ja saatiin tää user id
 
     this.state = {
       email: '',
-      password: 'asdsadasdsad',
-      username: 'johndoe',
-      interests: '',
-      skills: '',
+      password: '',
+      name: '',
+      coords: [],
+      interests: [],
+      skills: [],
+      userid: '5affcc26afdada4e1c475ee9',
+      showPassword: false,
       imageurl:
-        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAMFBMVEXd3N3////8/Pzg3+D5+fn29vbn5+fz8/Pv7+/i4eLs7Ozk5OTq6erv7u/h4eHp6OnBybNdAAAEVElEQVR4nO2d3ZKqQAyEFRBFFN//bZc5SIHKrpDppHOofDfe0pXpJPPr4RAEQRAEQRAEQRAEQRAEQRAEQRAEQWBI19U9bVeyP0RM2dzup6LnmOh/q8u9/e/klI9zdVygOF0b9retp6zPxZKKJ9W9Y3/hKrr7XyoGzi37K7/Snr+qGMJyc22X8r5ORuLkOCq374PqZYA5DUpz2iSjp3iwv3mJels4nkFhf/UHW9wxp/LmlJXJ6pPCVVFpFsv4Sm7sr59oc3Qcj1f29480Eps7VFLmxSPhIw2LfT7hwvEAHb0SfnN/Q+joOy92u9LmGn3kwtUBMPqToqYKuaJ09M0Kc3BlV5A5d6IQSMYaKXghqZE6mD395pnUF1gtPTggvJBAHZIguaRD62BVRWANGakoQmBFfQajvLcKOih2VxhZvd0JQjRGFqOUlCo6CNP3h46Qk7kQeDUcsK+J6D5rxHwZQsfr9m5vlHSYT6/UhFi3W/AWfsS6tu9GyEVLiHWTEkJCiBLCvU9/QnaTtXYjJFoUb0J20/3uZz6iVEjsZ4hKact+YWs3qyhKJiHst6usNDJWsWE77HMo+woalYSy+bab/ZESP7ZIB7fgcxLGpkICvtVD22gHl5KCdnQWnIGJJ52gLiGeRcGeDqKeNQUdBEzY71XNKWF+5zl9ADa46IeYQZuiDu5fQDIX9UDjCGD2XvHPLx8QhmcbfST78C/3yO+MrHswx8LRTZic0eVlXD0RO96Hz2dcZZXx5E2HsKcn31FYptx8YMjdJcSRelP2Ki4eyvkvbLh2fPbnjol6w+g6uymD73TXjXWxunq47PbO2qcF3sLize6N+IijK6vIouEuKs2fj4esoPARFWFv8iqFPmM/tKBlFPabHBfYCl3BbLvyJlTv8Bp6hDvmkJxSKpx9YLSRuMXSOfa3wVU2p4/2M3jRszTrlJg2xVrx+KfEMCYbX23aqsRsnUvlFMocozSsrsNIiaY/Rix8opevXpSo5y4bHfpKOiMd2q/w6PQly6h2K4Y6VDfeDRLvHLUkbJF452glYYUTc9+U6NhE6ZrxX6gcIwCen1mPQv9oP7ASCoPLNPNOwHMwZWAl0INL6wLPV8BnmgkZawSauaBnFzcCffmQGBBoSNRuT64DNzWhOX0A5ndyQHAhIdXCCVBVpAcEFRKyQxIQl6g8CLYVxBSLWkNGALWEWdQnAOXdeMHhN/IXIlwEBHCPzIXVE7l2d2H1RKbdfVg9kWl32gz3k7w5L73NmshquDhrQMtkrQw5Gll5Y8tNzkpk5C1PIytrbLmphgPymqj2GpgM+Rk7R8k3IU7AviySYRIHk/VXpFN3ZxaRm8RVFUlIK4kzi4hnV0rvNeUgc7s7r0vd7mTZYY5sCcKd16Vud7BU+o5o6RT3z044RA8R+Fl3mBCtQDjr4QcknbzD7CvLv67m6yOSebva08Q5SJ5sdVhGZIVkN0KczXMHfp/t/gDySEhntCfiZwAAAABJRU5ErkJggg==',
-      showPassword: false
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAMFBMVEXd3N3////8/Pzg3+D5+fn29vbn5+fz8/Pv7+/i4eLs7Ozk5OTq6erv7u/h4eHp6OnBybNdAAAEVElEQVR4nO2d3ZKqQAyEFRBFFN//bZc5SIHKrpDppHOofDfe0pXpJPPr4RAEQRAEQRAEQRAEQRAEQRAEQRAEQWBI19U9bVeyP0RM2dzup6LnmOh/q8u9/e/klI9zdVygOF0b9retp6zPxZKKJ9W9Y3/hKrr7XyoGzi37K7/Snr+qGMJyc22X8r5ORuLkOCq374PqZYA5DUpz2iSjp3iwv3mJels4nkFhf/UHW9wxp/LmlJXJ6pPCVVFpFsv4Sm7sr59oc3Qcj1f29480Eps7VFLmxSPhIw2LfT7hwvEAHb0SfnN/Q+joOy92u9LmGn3kwtUBMPqToqYKuaJ09M0Kc3BlV5A5d6IQSMYaKXghqZE6mD395pnUF1gtPTggvJBAHZIguaRD62BVRWANGakoQmBFfQajvLcKOih2VxhZvd0JQjRGFqOUlCo6CNP3h46Qk7kQeDUcsK+J6D5rxHwZQsfr9m5vlHSYT6/UhFi3W/AWfsS6tu9GyEVLiHWTEkJCiBLCvU9/QnaTtXYjJFoUb0J20/3uZz6iVEjsZ4hKact+YWs3qyhKJiHst6usNDJWsWE77HMo+woalYSy+bab/ZESP7ZIB7fgcxLGpkICvtVD22gHl5KCdnQWnIGJJ52gLiGeRcGeDqKeNQUdBEzY71XNKWF+5zl9ADa46IeYQZuiDu5fQDIX9UDjCGD2XvHPLx8QhmcbfST78C/3yO+MrHswx8LRTZic0eVlXD0RO96Hz2dcZZXx5E2HsKcn31FYptx8YMjdJcSRelP2Ki4eyvkvbLh2fPbnjol6w+g6uymD73TXjXWxunq47PbO2qcF3sLize6N+IijK6vIouEuKs2fj4esoPARFWFv8iqFPmM/tKBlFPabHBfYCl3BbLvyJlTv8Bp6hDvmkJxSKpx9YLSRuMXSOfa3wVU2p4/2M3jRszTrlJg2xVrx+KfEMCYbX23aqsRsnUvlFMocozSsrsNIiaY/Rix8opevXpSo5y4bHfpKOiMd2q/w6PQly6h2K4Y6VDfeDRLvHLUkbJF452glYYUTc9+U6NhE6ZrxX6gcIwCen1mPQv9oP7ASCoPLNPNOwHMwZWAl0INL6wLPV8BnmgkZawSauaBnFzcCffmQGBBoSNRuT64DNzWhOX0A5ndyQHAhIdXCCVBVpAcEFRKyQxIQl6g8CLYVxBSLWkNGALWEWdQnAOXdeMHhN/IXIlwEBHCPzIXVE7l2d2H1RKbdfVg9kWl32gz3k7w5L73NmshquDhrQMtkrQw5Gll5Y8tNzkpk5C1PIytrbLmphgPymqj2GpgM+Rk7R8k3IU7AviySYRIHk/VXpFN3ZxaRm8RVFUlIK4kzi4hnV0rvNeUgc7s7r0vd7mTZYY5sCcKd16Vud7BU+o5o6RT3z044RA8R+Fl3mBCtQDjr4QcknbzD7CvLv67m6yOSebva08Q5SJ5sdVhGZIVkN0KczXMHfp/t/gDySEhntCfiZwAAAABJRU5ErkJggg=='
     };
+
+    this.getUser(this.state.userid);
+  }
+
+  getUser(userid) {
+    return fetch('http://localhost:5000/getuser/' + userid).then(response => {
+      return response.json().then(obj => {
+        this.setState({
+          email: obj.email,
+          name: obj.name,
+          password: obj.password,
+          coords: obj.coords,
+          interests: obj.interests,
+          skills: obj.skills,
+          imageurl: obj.imageURL,
+          addedskill: '',
+          addedinterest: ''
+        });
+      });
+    });
+  }
+
+  addSkill(skillname) {
+    console.log('You are adding this skill:', skillname);
+
+    typedskill.value = '';
+
+    var _skills = this.state.skills;
+    _skills.push(skillname);
+
+    const data = { skills: _skills };
+
+    console.log(data);
+    var URL = 'http://localhost:5000/updateuser/' + this.state.userid;
+    console.log(URL);
+
+    fetch(URL, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    })
+      .then(response => {
+        return response.json();
+      })
+      .catch(error => console.error('Error:', error))
+      .then(response => console.log('Success:', response))
+      .then(this.setState({ skills: _skills }));
+  }
+
+  deleteSkill(skillname) {
+    console.log('You deleted ', skillname);
+    var skillset = this.state.skills.filter(e => e !== skillname);
+    const data = { skills: skillset };
+
+    fetch('http://localhost:5000/updateuser/' + this.state.userid, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    })
+      .then(response => {
+        return response.json();
+      })
+      .catch(error => console.error('Error:', error))
+      .then(response => console.log('Success:', response))
+      .then(this.setState({ skills: skillset }));
+  }
+
+  addInterest(interestname) {
+    console.log('You are adding this interest:', interestname);
+
+    typedinterest.value = '';
+
+    var _i = this.state.interests;
+    _i.push(interestname);
+
+    const data = { interests: _i };
+
+    console.log(data);
+    var URL = 'http://localhost:5000/updateuser/' + this.state.userid;
+    console.log(URL);
+
+    fetch(URL, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    })
+      .then(response => {
+        return response.json();
+      })
+      .catch(error => console.error('Error:', error))
+      .then(response => console.log('Success:', response))
+      .then(this.setState({ interests: _i }));
   }
 
   handleClickShowPassword() {
     this.setState({ showPassword: !this.state.showPassword });
+    console.log('Show password');
   }
 
   handleChange() {
-    // this.setState({ showPassword: !this.state.showPassword });
-    console.log('lol');
+    console.log('Changes are not yet handled');
   }
 
   handleMouseDownPassword() {
@@ -145,7 +229,7 @@ class Settings extends React.Component {
             justify="center"
             alignItems="center"
           >
-            <Avatar alt={this.state.username} src={this.state.imageurl} />
+            <Avatar alt={this.state.name} src={this.state.imageurl} />
           </Grid>
           <Grid item xs={12} sm={12}>
             <input
@@ -169,14 +253,13 @@ class Settings extends React.Component {
               <TextField
                 label="Username"
                 id="margin-none"
-                defaultValue="John"
+                defaultValue={this.state.name}
                 className="container"
                 /* onChange={handleChange('username')}*/
               />
               <TextField
                 label="E-mail"
-                id="margin-none"
-                defaultValue="john@doe.com"
+                defaultValue={this.state.email}
                 className="container"
               />
             </FormControl>
@@ -188,12 +271,12 @@ class Settings extends React.Component {
                 id="password"
                 type={this.state.showPassword ? 'text' : 'password'}
                 value={this.state.password}
-                onChange={this.handleChange('password')}
+                // onChange={this.handleChange('password')}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="Toggle password visibility"
-                      onClick={this.handleClickShowPassword}
+                      onClick={this.handleClickShowPassword.bind(this)}
                       onMouseDown={this.handleMouseDownPassword}
                     >
                       {this.state.showPassword ? (
@@ -212,22 +295,82 @@ class Settings extends React.Component {
     );
   }
 
+  deleteInterest(interestname) {
+    console.log('You deleted ', interestname);
+    var interestset = this.state.interests.filter(e => e !== interestname);
+    const data = { interests: interestset };
+
+    fetch('http://localhost:5000/updateuser/' + this.state.userid, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    })
+      .then(response => {
+        return response.json();
+      })
+      .catch(error => console.error('Error:', error))
+      .then(response => console.log('Success:', response))
+      .then(this.setState({ interests: interestset }));
+  }
+
+  renderSkill(skill) {
+    const { classes } = this.props;
+    return (
+      <Chip
+        label={skill}
+        onClick={handleClick}
+        onDelete={() => this.deleteSkill(skill)}
+        className={classes.chip}
+      />
+    );
+  }
+
+  renderInterest(interest) {
+    const { classes } = this.props;
+    return (
+      <Chip
+        label={interest}
+        onClick={handleClick}
+        onDelete={() => this.deleteInterest(interest)}
+        className={classes.chip}
+      />
+    );
+  }
+
   renderUserSkills() {
     const { classes } = this.props;
     return (
       <Paper className={classes.paper}>
         <Typography variant="title" gutterBottom>
-          Skills you know
+          Skills
         </Typography>
-        <Chip
-          label="Gardening"
-          onClick={handleClick}
-          onDelete={handleDelete}
-          className={classes.chip}
-        />
+
+        {this.state.skills.map(this.renderSkill.bind(this))}
         <br />
-        <InputLabel htmlFor="input-with-icon-adornment">Add skill</InputLabel>
-        <Input id="input-with-icon-adornment2" />
+
+        <Input
+          id="typedskill"
+          placeholder="Add skill"
+          className={classes.helptext}
+          inputProps={{
+            'aria-label': 'Description'
+          }}
+          onChange={event => this.setState({ addedskill: event.target.value })}
+        />
+
+        <Tooltip id="tooltip-fab" title="Add">
+          <Button
+            variant="fab"
+            color="primary"
+            aria-label="Add"
+            className={classes.fab}
+            onClick={() => this.addSkill(this.state.addedskill)}
+          >
+            <AddIcon />
+          </Button>
+        </Tooltip>
       </Paper>
     );
   }
@@ -239,29 +382,44 @@ class Settings extends React.Component {
         <Typography variant="title" gutterBottom>
           Interests
         </Typography>
-        <Chip
-          label="Scala"
-          onClick={handleClick}
-          onDelete={handleDelete}
-          className={classes.chip}
-        />
-        <Chip
-          label="Python"
-          onClick={handleClick}
-          onDelete={handleDelete}
-          className={classes.chip}
-        />
+        {this.state.interests.map(this.renderInterest.bind(this))}
         <br />
-        <InputLabel htmlFor="input-with-icon-adornment">
-          Add interest
-        </InputLabel>
-        <Input id="input-with-icon-adornment" />
+        <Input
+          id="typedinterest"
+          placeholder="Add interest"
+          className={classes.helptext}
+          inputProps={{
+            'aria-label': 'Description'
+          }}
+          onChange={event =>
+            this.setState({ addedinterest: event.target.value })
+          }
+        />
+
+        <Tooltip id="tooltip-fab" title="Add">
+          <Button
+            variant="fab"
+            color="primary"
+            aria-label="Add"
+            className={classes.fab}
+            onClick={() => this.addInterest(this.state.addedinterest)}
+          >
+            <AddIcon />
+          </Button>
+        </Tooltip>
       </Paper>
     );
   }
 
   renderApplicationPreferences() {
-    // TODO: implement
+    const { classes } = this.props;
+    return (
+      <Paper className={classes.paper}>
+        <Typography variant="title" gutterBottom>
+          App settings [Coming soon]
+        </Typography>
+      </Paper>
+    );
   }
 
   render() {
@@ -270,11 +428,12 @@ class Settings extends React.Component {
         {this.renderTopbar()}
 
         <div id="settingscontainer">
-          {this.renderUserSettings()}
-
           {this.renderUserSkills()}
 
           {this.renderUserInterests()}
+
+          {this.renderUserSettings()}
+          {this.renderApplicationPreferences()}
         </div>
       </div>
     );

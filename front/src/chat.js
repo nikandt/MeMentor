@@ -18,22 +18,32 @@ import Fade from '@material-ui/core/Fade';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
+import { MYID } from './message';
 
 class Chat extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: true,
-      messages: ['moi', 'moi', 'miten menee', 'hyvin', 'ok'],
+      messages: [],
       chatText: ''
     };
   }
 
+  componentWillUnmount() {
+    clearInterval(this.updateTimer);
+  }
+
   componentDidMount() {
-    fetch('http://localhost:5000/getconversation/', {
+    this.tick();
+    this.updateTimer = setInterval(this.tick.bind(this), 1000);
+  }
+
+  tick() {
+    fetch('http://localhost:5000/getconversation', {
       method: 'POST',
       body: JSON.stringify({
-        userA: 'aaa',
+        userA: MYID,
         userB: this.props.userId
       }),
       headers: new Headers({
@@ -44,22 +54,25 @@ class Chat extends React.Component {
         return response.json();
       })
       .then(obj => {
-        console.log(obj);
+        this.setState({
+          messages: obj.messages
+        });
       });
   }
 
   renderMessage(msg) {
+    const isMe = msg.sender === MYID;
     return (
       <ListItem dense>
-        {!msg.isMe && <Avatar src={'http://zumba.com'} />}
+        {!isMe && <Avatar src={'http://zumba.com'} />}
         <ListItemText
           primary={msg.text}
           style={{
-            textAlign: msg.isMe ? 'right' : 'left',
-            backgroundColor: msg.isMe ? '#d4ffe9' : '#efeeee'
+            textAlign: isMe ? 'right' : 'left',
+            backgroundColor: isMe ? '#d4ffe9' : '#efeeee'
           }}
         />
-        {msg.isMe && <Avatar src={'http://zumba.com'} />}
+        {isMe && <Avatar src={'http://zumba.com'} />}
       </ListItem>
     );
   }
@@ -75,9 +88,7 @@ class Chat extends React.Component {
           </Toolbar>
         </AppBar>
         <List style={{ paddingBottom: 32 /* extra 32px because chat */ }}>
-          {this.state.messages.map((msg, index) =>
-            this.renderMessage({ text: msg, isMe: index % 2 === 1 })
-          )}
+          {this.state.messages.map(this.renderMessage.bind(this))}
         </List>
         <TextField
           style={{
@@ -95,9 +106,20 @@ class Chat extends React.Component {
           value={this.state.chatText}
           onKeyDown={event => {
             if (event.key === 'Enter') {
+              fetch('http://localhost:5000/addmessage', {
+                method: 'POST',
+                body: JSON.stringify({
+                  userA: MYID,
+                  userB: this.props.userId,
+                  time: 420,
+                  text: event.target.value
+                }),
+                headers: new Headers({
+                  'Content-Type': 'application/json'
+                })
+              });
               this.setState({
-                chatText: '',
-                messages: [...this.state.messages, event.target.value]
+                chatText: ''
               });
             }
           }}
