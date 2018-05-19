@@ -1,5 +1,6 @@
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
+import json
 
 from server import server
 
@@ -11,11 +12,12 @@ S = server()
 def hello():
   return "Hello World!"
 
-@app.route("/add/<name>")
-def add(name):
-  return S.addUser(name)
+@app.route('/adduser', methods=['GET', 'POST'])
+def add_user():
+    content = request.get_json(silent=True)
+    print(content)
+    return S.addUser( content )
 
-
-@app.route("/getUsers")
-def getUsers():
+@app.route("/getusers", methods=['GET'])
+def get_users():
   return S.getUsers()
