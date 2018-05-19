@@ -42,18 +42,16 @@ class Browse extends React.Component {
 
   renderUser(user) {
     return (
-      <ListItem key={user.name} dense button>
-        <Avatar alt={user.name} src={user.imageURL || 'http://zumba.com'} />
-        <ListItemText
-          primary={user.name}
-          secondary={`Knows ${user.skills.join(', ')}`}
+      <div>
+        <Avatar
+          alt={user.name}
+          src={user.imageURL || 'http://zumba.com'}
+          style={{ width: 256, height: 256 }}
         />
-        <ListItemSecondaryAction>
-          <IconButton aria-label="Message">
-            <CommentIcon />
-          </IconButton>
-        </ListItemSecondaryAction>
-      </ListItem>
+        <Typography variant="title" color="inherit">
+          {user.name}
+        </Typography>
+      </div>
     );
   }
 
@@ -72,7 +70,7 @@ class Browse extends React.Component {
         </Fade>
       );
     } else if (this.state.users.length > 0) {
-      return <List>{this.state.users.map(this.renderUser)}</List>;
+      return this.renderUser(this.state.users[0]);
     } else {
       return (
         <Typography variant="body1" color="inherit">
