@@ -57,8 +57,8 @@ class server:
   def getConversation(self, mongoid):
     ret = {}
     convo = self.userCollection.conversations.find_one({"_id": ObjectId(mongoid)})
-    ret["A"] = convo["userA"]
-    ret["B"] = convo["userB"]
+    ret["userA"] = convo["userA"]
+    ret["userB"] = convo["userB"]
     ret["messages"] = []
     for m in convo["messages"]:
       ret["messages"].append(self.getMessage(m))
@@ -66,18 +66,18 @@ class server:
 
   def getUserConversation(self, fields):
     ret = {}
-    ret["A"] = fields["userA"]
-    ret["B"] = fields["userB"]
+    ret["userA"] = fields["userA"]
+    ret["userB"] = fields["userB"]
     ret["messages"] = []
-    convo = self.userCollection.conversations.find_one({"userA": ret["A"], "userB": ret["B"]})
+    convo = self.userCollection.conversations.find_one({"userA": ret["userA"], "userB": ret["userB"]})
     if (not convo):
-        convo = self.userCollection.conversations.find_one({"userA": ret["B"], "userB": ret["A"]})
+        convo = self.userCollection.conversations.find_one({"userA": ret["userB"], "userB": ret["userA"]})
     if (convo):
       for m in convo["messages"]:
         ret["messages"].append(self.getMessage(m))
-        return dumps(ret)
-
+      return dumps(ret)
     else:
+      print("new convo")
       return self.addConversation(ret)
 
 
