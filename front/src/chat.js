@@ -54,25 +54,30 @@ class Chat extends React.Component {
         return response.json();
       })
       .then(obj => {
+        const me = MYID === obj.userA._id.$oid ? obj.userA : obj.userB;
+        const other = MYID === obj.userA._id.$oid ? obj.userB : obj.userA;
         this.setState({
-          messages: obj.messages
+          messages: obj.messages,
+          me: me,
+          other: other
         });
       });
   }
 
   renderMessage(msg) {
-    const isMe = msg.sender === MYID;
+    const isMe = msg.sender === this.state.me._id.$oid;
     return (
       <ListItem dense>
-        {!isMe && <Avatar src={'http://zumba.com'} />}
+        {!isMe && <Avatar src={this.state.other.imageURL} />}
         <ListItemText
           primary={msg.text}
           style={{
+            height: 25,
             textAlign: isMe ? 'right' : 'left',
             backgroundColor: isMe ? '#d4ffe9' : '#efeeee'
           }}
         />
-        {isMe && <Avatar src={'http://zumba.com'} />}
+        {isMe && <Avatar src={this.state.me.imageURL} />}
       </ListItem>
     );
   }
@@ -83,7 +88,7 @@ class Chat extends React.Component {
         <AppBar position="static" color="default">
           <Toolbar>
             <Typography variant="title" color="inherit">
-              Chat with {this.props.userId}
+              Chat with {this.state.other && this.state.other.name}
             </Typography>
           </Toolbar>
         </AppBar>
