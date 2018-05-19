@@ -56,9 +56,9 @@ function handleClick() {
 function handleDelete(userid) {
   console.log('You deleted the Chip.'); // eslint-disable-line no-alert
 
-  const data = { topkek: 'kektop' };
+  const data = { skills: ['jebubu'] };
 
-  fetch('http://localhost:5000/update_user/5affb271afdada3e8885a9a6', {
+  fetch('http://localhost:5000/updateuser/5affcc26afdada4e1c475ee9', {
     method: 'POST',
     body: JSON.stringify(data),
     headers: new Headers({
