@@ -51,6 +51,7 @@ class Browse extends React.Component {
           src={user.imageURL || 'http://zumba.com'}
           style={{ width: '100%', height: 'auto' }}
         />
+        <br />
         <Typography
           variant="display1"
           color="inherit"
