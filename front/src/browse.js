@@ -51,20 +51,29 @@ class Browse extends React.Component {
           src={user.imageURL || 'http://zumba.com'}
           style={{ width: '100%', height: 'auto' }}
         />
-        <Typography variant="title" color="inherit">
+        <Typography
+          variant="display1"
+          color="inherit"
+          style={{ fontSize: '1.8em' }}
+        >
+          knows{' '}
+          <Typography
+            variant="inherit"
+            color="primary"
+            style={{ display: 'inline' }}
+          >
+            {user.skills[0]}
+          </Typography>
+        </Typography>
+        <Typography variant="subheading" color="inherit">
+          and wants to learn <i>{user.interests[0]}</i>
+        </Typography>
+        <Typography variant="title" color="textSecondary">
           {user.name}
 
           <IconButton aria-label="Message">
             <CommentIcon onClick={() => this.props.onOpenChat(user._id.$oid)} />
           </IconButton>
-        </Typography>
-        <Typography variant="title" color="inherit">
-          <i>Skills </i>
-          {user.skills.join(', ')}
-        </Typography>
-        <Typography variant="title" color="inherit">
-          <i>Interests </i>
-          {user.interests.join(', ')}
         </Typography>
       </div>
     );

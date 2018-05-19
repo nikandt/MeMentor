@@ -18,6 +18,8 @@ import Fade from '@material-ui/core/Fade';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 
+export const MYID = '5affcc26afdada4e1c475ee9';
+
 class Message extends React.Component {
   constructor(props) {
     super(props);
@@ -28,7 +30,7 @@ class Message extends React.Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:5000/getconversations')
+    fetch('http://localhost:5000/getallconversations')
       .then(response => {
         return response.json();
       })
@@ -41,7 +43,7 @@ class Message extends React.Component {
   }
 
   renderConversation(conv) {
-    const otherUser = conv.userB; // TODO
+    const otherUser = conv.userB === MYID ? conv.userA : conv.userB;
     return (
       <ListItem
         key={otherUser}
