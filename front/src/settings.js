@@ -103,7 +103,8 @@ class Settings extends React.Component {
           skills: obj.skills,
           imageurl: obj.imageURL,
           addedskill: '',
-          addedinterest: ''
+          addedinterest: '',
+          addedphoto: ''
         });
       });
     });
@@ -212,6 +213,36 @@ class Settings extends React.Component {
     );
   }
 
+  handlePhotoChange(event) {
+    if (event.target.value) {
+      this.setState({ addedphoto: event.target.value });
+      console.log('New photo url:', event.target.value);
+
+      this.setState({ imageurl: event.target.value });
+
+      // TODO: files on backend?
+      /* const data = { imageURL: event.target.value };
+
+      console.log(data);
+      var URL = 'http://localhost:5000/updateuser/' + this.state.userid;
+      console.log(URL);
+
+      fetch(URL, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        })
+      })
+        .then(response => {
+          return response.json();
+        })
+        .catch(error => console.error('Error:', error))
+        .then(response => console.log('Success:', response))
+        .then(this.setState({ imageurl: event.target.value }));*/
+    }
+  }
+
   renderUserSettings() {
     const { classes } = this.props;
     return (
@@ -238,6 +269,7 @@ class Settings extends React.Component {
               id="button-file"
               multiple
               type="file"
+              onChange={event => this.handlePhotoChange(event)}
             />
             <label htmlFor="button-file">
               <Button variant="raised" component="span" className="photos">
