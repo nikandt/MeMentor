@@ -3,13 +3,80 @@ import ReactDOM from 'react-dom';
 import Button from '@material-ui/core/Button';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import RestoreIcon from '@material-ui/icons/Restore';
 import AppBar from '@material-ui/core/AppBar';
-import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import List from '@material-ui/core/List';
+import Avatar from '@material-ui/core/Avatar';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import CommentIcon from '@material-ui/icons/Comment';
+import IconButton from '@material-ui/core/IconButton';
+import Fade from '@material-ui/core/Fade';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Grid from '@material-ui/core/Grid';
 
 class Message extends React.Component {
   constructor() {
     super();
+    this.state = {
+      loading: true,
+      users: []
+    };
+  }
+
+  componentDidMount() {
+    fetch('http://localhost:5000/getusers')
+      .then(response => {
+        return response.json();
+      })
+      .then(obj => {
+        this.setState({
+          loading: false,
+          users: obj
+        });
+      });
+  }
+
+  renderUser(user) {
+    return (
+      <ListItem key={user.name} button>
+        <Avatar alt={user.name} src={user.imageURL || 'http://zumba.com'} />
+        <ListItemText primary={user.name} />
+        <ListItemSecondaryAction>
+          <IconButton aria-label="Message">
+            <CommentIcon />
+          </IconButton>
+        </ListItemSecondaryAction>
+      </ListItem>
+    );
+  }
+
+  renderUsers() {
+    if (this.state.loading) {
+      return (
+        <Fade
+          in={true}
+          style={{
+            transitionDelay: '800ms',
+            position: 'relative'
+          }}
+          unmountOnExit
+        >
+          <CircularProgress style={{ marginLeft: '50%', left: -20, top: 10 }} />
+        </Fade>
+      );
+    } else if (this.state.users.length > 0) {
+      return <List>{this.state.users.map(this.renderUser)}</List>;
+    } else {
+      return (
+        <Typography variant="body1" color="inherit">
+          You have no matches. Please purchase our premium subscription
+        </Typography>
+      );
+    }
   }
 
   render() {
@@ -22,38 +89,11 @@ class Message extends React.Component {
             </Typography>
           </Toolbar>
         </AppBar>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet assumenda
-        consectetur debitis magnam nobis possimus velit? Atque cumque, debitis
-        dolores, dolorum error inventore quia quidem repudiandae tempora vitae
-        voluptate voluptatem. Lorem ipsum dolor sit amet, consectetur
-        adipisicing elit. Aperiam asperiores aut, blanditiis delectus, dicta
-        dolor facilis illum in iure neque nisi numquam obcaecati odio quae quas
-        quod repudiandae sapiente voluptates! Lorem ipsum dolor sit amet,
-        consectetur adipisicing elit. Ea eos, error ipsa iure molestiae officiis
-        repellat similique voluptatibus? At atque consectetur consequuntur
-        debitis distinctio est iure omnis pariatur? Libero, quia? Lorem ipsum
-        dolor sit amet, consectetur adipisicing elit. Aperiam cum cupiditate
-        dolor eos itaque maiores numquam perferendis reiciendis sunt voluptas?
-        Amet corporis dicta esse fugiat iure, necessitatibus numquam quos ullam?
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias debitis,
-        esse exercitationem maiores neque odio saepe sed voluptate? Architecto
-        eius porro saepe sint velit vero? Aperiam asperiores doloremque harum
-        porro. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam
-        autem blanditiis cum cupiditate delectus eius explicabo ipsam modi
-        officiis quam quod, tempore velit voluptatum. Pariatur, saepe, ut. Cum,
-        possimus, vero. Lorem ipsum dolor sit amet, consectetur adipisicing
-        elit. Aspernatur, eligendi, nesciunt! Delectus dolorem enim error harum
-        mollitia rem soluta vero vitae. Assumenda eius, fugiat illum laudantium
-        nihil sapiente sit ut. Lorem ipsum dolor sit amet, consectetur
-        adipisicing elit. Architecto autem delectus doloribus enim esse eveniet
-        facere, harum illum laboriosam molestias nostrum officiis optio saepe
-        sapiente sunt suscipit veritatis voluptate voluptatum. Lorem ipsum dolor
-        sit amet, consectetur adipisicing elit. Eligendi fuga soluta tempore. A
-        aspernatur at cum dolorem eos esse illum in maxime nesciunt odio, omnis
-        porro praesentium sapiente suscipit tempora. Lorem ipsum dolor sit amet,
-        consectetur adipisicing elit. Aliquid eius explicabo harum nihil optio,
-        provident quasi saepe. A consectetur deserunt ducimus earum facere
-        nostrum nulla provident quaerat repudiandae similique, sit.
+        <Grid container spacing={24}>
+          <Grid item xs={12}>
+            {this.renderUsers()}
+          </Grid>
+        </Grid>
       </div>
     );
   }
