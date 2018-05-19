@@ -31,6 +31,8 @@ class server:
     if (userModel.checkField(new)):
       old = self.userCollection.users.find_one({ "_id": ObjectId(mongoid) })
       fields = {**old, **new}
+      fields["skills"] = list(set(fields["skills"]))
+      fields["interests"] = list(set(fields["interests"]))
       self.userCollection.users.update({ "_id": ObjectId(mongoid) },fields)
       return "jee"
     else:
@@ -85,6 +87,8 @@ class server:
         convo = self.userCollection.conversations.find_one({"userA": ret["userB"], "userB": ret["userA"]})
     if (convo):
       ret["messages"] = list(self.userCollection.messages.find({"conversation": str(convo["_id"])}))
+      ret["userA"] = self.userCollection.users.find_one({"_id": ObjectId(ret["userA"])})
+      ret["userB"] = self.userCollection.users.find_one({"_id": ObjectId(ret["userB"])})
       return dumps(ret)
     else:
       return self.addConversation(ret)
@@ -127,6 +131,23 @@ class server:
 
     return ";:<"
 
+  def getMatches(self, userid):
+    u = self.userCollection.users.find_one({"_id": ObjectId(userid)})
+    potential = []
+    matches = []
+    for s in u["skills"]:
+      potential.extend( list(self.userCollection.users.find({"interests": s})))
+    ids = set([str(k["_id"]) for k in potential])
+    ppotential = []
+    for p in potential:
+      if str(p["_id"]) in ids:
+        ppotential.append(p)
+        ids.remove(str(p["_id"]))
+    potential = ppotential
+    for m in potential:
+      if ( not set(m["skills"]).isdisjoint(set(u["interests"]))):
+        matches.append(m)
+    return dumps(matches)
 
   def addSkill(self, name):
     post = {"name": name,}

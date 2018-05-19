@@ -26,7 +26,7 @@ class Browse extends React.Component {
     this.state = {
       loading: true,
       users: [],
-      displayedUserIndex: 0
+      displayedUserIndex: 10000
     };
   }
 
@@ -45,11 +45,16 @@ class Browse extends React.Component {
 
   renderUser(user) {
     return (
-      <div>
+      <div style={{ height: 'calc(100vh - 70px)' }}>
         <Avatar
           alt={user.name}
           src={user.imageURL || 'http://zumba.com'}
-          style={{ width: '100%', height: 'auto' }}
+          style={{
+            marginTop: 20,
+            marginBottom: 5,
+            width: '100%',
+            height: 'auto'
+          }}
         />
         <br />
         <Typography
@@ -67,7 +72,8 @@ class Browse extends React.Component {
           </Typography>
         </Typography>
         <Typography variant="subheading" color="inherit">
-          and wants to learn <i>{user.interests[0]}</i>
+          and wants to learn{' '}
+          <span style={{ color: '#3fb580' }}>{user.interests[0]}</span>
         </Typography>
         <Typography variant="title" color="textSecondary">
           {user.name}
