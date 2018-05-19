@@ -20,7 +20,7 @@ class App extends React.Component {
     };
   }
 
-  callJebuliinas() {
+  static callJebuliinas() {
     fetch('http://localhost:5000/getUsers').then(function(response) {
       return response.json();
     });
@@ -30,7 +30,6 @@ class App extends React.Component {
     if (this.state.page === 'index') {
       return (
         <div>
-          {' '}
           <AppBar position="static" color="default">
             <Toolbar>
               <Typography variant="title" color="inherit">
@@ -38,7 +37,7 @@ class App extends React.Component {
               </Typography>
             </Toolbar>
           </AppBar>
-          {this.callJebuliinas()}
+          {App.callJebuliinas()}
         </div>
       );
     } else if (this.state.page === 'message') {
@@ -56,20 +55,29 @@ class App extends React.Component {
     return (
       <div>
         {this.renderPage()}
-        <BottomNavigation onChange={(event, value) => this.switchPage(value)}>
+        <BottomNavigation
+          style={{
+            position: 'fixed',
+            bottom: 0,
+            left: 0,
+            right: 0
+          }}
+          value={this.state.page}
+          onChange={(event, value) => this.switchPage(value)}
+        >
           <BottomNavigationAction
             value="index"
-            label="aaaa"
+            label="Index"
             icon={<HomeIcon />}
           />
           <BottomNavigationAction
             value="message"
-            label="bbbb"
+            label="Messages"
             icon={<MessageIcon />}
           />
           <BottomNavigationAction
             value="settings"
-            label="cccc"
+            label="Settings"
             icon={<SettingsIcon />}
           />
         </BottomNavigation>
