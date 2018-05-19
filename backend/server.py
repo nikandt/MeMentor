@@ -48,14 +48,6 @@ class server:
     else:
       return ";:<"
 
-  def addmessage(self, mongoid, new):
-    if (userModel.checkField(new)):
-      fields = {**old, **new}
-      self.userCollection.conversations.update({ "_id": ObjectId(mongoid) },fields)
-      return "jee"
-    else:
-      return ";:<"
-
   def getConversations(self):
     return dumps( self.userCollection.conversations.find() )
 
