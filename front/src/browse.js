@@ -136,7 +136,7 @@ class Browse extends React.Component {
   render() {
     return (
       <div>
-        <AppBar position="static" color="default">
+        <AppBar position="static" color="primary">
           <Toolbar>
             <Typography variant="title" color="inherit">
               Matches

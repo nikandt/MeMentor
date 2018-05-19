@@ -212,7 +212,7 @@ class Settings extends React.Component {
 
   renderTopbar() {
     return (
-      <AppBar position="static" color="default">
+      <AppBar position="static" color="primary">
         <Toolbar>
           <Typography variant="title" color="inherit">
             Settings
