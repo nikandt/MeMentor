@@ -52,3 +52,9 @@ def get_user_conversation():
 def add_message(chatid):
     content = request.get_json(silent=True)
     return S.addMessage( chatid, content )
+
+
+@app.route('/keywords', methods=['GET'])
+def get_keywords():
+    from data.keywords import words
+    return json.dumps( words )
