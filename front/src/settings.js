@@ -104,7 +104,8 @@ class Settings extends React.Component {
           imageurl: obj.imageURL,
           addedskill: '',
           addedinterest: '',
-          addedphoto: ''
+          addedphoto: '',
+          password: '********'
         });
       });
     });
@@ -243,6 +244,14 @@ class Settings extends React.Component {
     }
   }
 
+  handleNameChange() {
+    namefield.value = '';
+  }
+
+  handleEmailChange() {
+    emailfield.value = '';
+  }
+
   renderUserSettings() {
     const { classes } = this.props;
     return (
@@ -283,16 +292,20 @@ class Settings extends React.Component {
               className={classNames(classes.margin, classes.textField)}
             >
               <TextField
-                label="Username"
-                id="margin-none"
+                label="Name"
+                id="namefield"
                 defaultValue={this.state.name}
                 className="container"
-                /* onChange={handleChange('username')}*/
+                value={this.state.name}
+                onClick={() => this.handleNameChange()}
               />
               <TextField
                 label="E-mail"
+                id="emailfield"
                 defaultValue={this.state.email}
                 className="container"
+                value={this.state.email}
+                onClick={() => this.handleEmailChange()}
               />
             </FormControl>
             <FormControl
