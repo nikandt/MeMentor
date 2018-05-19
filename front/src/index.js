@@ -12,6 +12,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Settings from './settings';
 import Message from './message';
 import Browse from './browse';
+import Chat from './chat';
 
 class App extends React.Component {
   constructor() {
@@ -36,7 +37,7 @@ class App extends React.Component {
     } else if (this.state.page === 'message') {
       return <Message onOpenChat={userId => this.openChat(userId)} />;
     } else if (this.state.page === 'chat') {
-      return <h1>TODO chat with {this.state.chatPartner}</h1>;
+      return <Chat userId={this.state.chatPartner} />;
     } else {
       return <Settings />;
     }
@@ -54,7 +55,7 @@ class App extends React.Component {
     }
     return (
       <div>
-        {this.renderPage()}
+        <div style={{ paddingBottom: 56 }}>{this.renderPage()}</div>
         <BottomNavigation
           style={{
             position: 'fixed',
