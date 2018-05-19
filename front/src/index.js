@@ -65,21 +65,9 @@ class App extends React.Component {
           value={this.state.page}
           onChange={(event, value) => this.switchPage(value)}
         >
-          <BottomNavigationAction
-            value="index"
-            label="Index"
-            icon={<HomeIcon />}
-          />
-          <BottomNavigationAction
-            value="message"
-            label="Messages"
-            icon={<MessageIcon />}
-          />
-          <BottomNavigationAction
-            value="settings"
-            label="Settings"
-            icon={<SettingsIcon />}
-          />
+          <BottomNavigationAction value="index" icon={<HomeIcon />} />
+          <BottomNavigationAction value="message" icon={<MessageIcon />} />
+          <BottomNavigationAction value="settings" icon={<SettingsIcon />} />
         </BottomNavigation>
       </div>
     );
