@@ -3,12 +3,15 @@ from bson.json_util import dumps
 from bson.objectid import ObjectId
 
 from user import user
+from conversation import conversation, message
 
 userModel = user()
 
 class server:
   def __init__(self):
     self.users = {}
+    self.conversations = {}
+    self.messages = {}
     self.port = 27017
     #jebujebunsalasanaananas
     self.client = MongoClient("mongodb+srv://jebujebu:jebujebunsalasanaananas@junctiontsinghua-rfzol.mongodb.net/test")
@@ -37,26 +40,41 @@ class server:
     return dumps( self.userCollection.users.find() )
 
   def addConversation(self, fields):
-    newuser = user()
-    if (newuser.checkDict(fields)):
-      newuser.setid( self.userCollection.users.insert_one(fields).inserted_id )
-      self.users[newuser.id] = newuser
+    newconversation = conversation()
+    if (newconversation.checkDict(fields)):
+      newconversation.setid( self.userCollection.conversations.insert_one(fields).inserted_id )
+      self.conversations[newconversation.id] = newconversation
       return "jee"
     else:
       return ";:<"
 
-  def updateConversation(self, mongoid, new):
+  def addmessage(self, mongoid, new):
     if (userModel.checkField(new)):
-      old = self.userCollection.users.find_one({ "_id": ObjectId(mongoid) })
       fields = {**old, **new}
-      self.userCollection.users.update({ "_id": ObjectId(mongoid) },fields)
+      self.userCollection.conversations.update({ "_id": ObjectId(mongoid) },fields)
       return "jee"
     else:
       return ";:<"
 
-  def getConversation(self):
-    return dumps( self.userCollection.users.find() )
+  def getConversations(self):
+    return dumps( self.userCollection.conversations.find() )
 
+  def getConversation(self, mongoid):
+    return dumps( self.userCollection.conversations.find() )
+
+  def addMessage(self, chatid, fields):
+    newmessage = message()
+    if (newmessage.checkDict(fields)):
+      newmessage.setid( self.userCollection.messages.insert_one(fields).inserted_id )
+      self.messages[newmessage.id] = newmessage
+
+      convo = self.userCollection.conversations.find_one({ "_id": ObjectId(chatid) })
+      convo['messages'].append( str(newmessage.id) )
+      self.userCollection.conversations.update({ "_id": ObjectId(chatid) },convo)
+
+      return "jee"
+    else:
+      return ";:<"
 
 
   def addSkill(self, name):

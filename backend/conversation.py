@@ -4,19 +4,16 @@ from validators import *
 from model import model
 
 
-class conversation:
-
-  def __init__(self, userA, userB):
-    self.id = None
+class conversation(model):
+  def __init__(self):
     self.checks = {
       "userA": stringcheck,
       "userB": stringcheck,
       "messages": stringlistscheck,
     }
-    self.users = [userA, userB]
 
 class message(model):
-  def __init__(self, sender, text):
+  def __init__(self):
     self.checks = {
       "sender": stringcheck,
       "conversation": stringcheck,

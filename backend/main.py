@@ -32,11 +32,15 @@ def add_conversation():
     content = request.get_json(silent=True)
     return S.addConversation( content )
 
-@app.route('/updateconversation/<mongoid>', methods=['POST'])
-def update_conversation(mongoid):
-    content = request.get_json(silent=True)
-    return S.updateConversation( mongoid, content )
+@app.route("/getconversations", methods=['GET'])
+def get_conversations():
+  return S.getConversations()
 
 @app.route("/getconversation/<mongoid>", methods=['GET'])
 def get_conversation(mongoid):
-  return S.getConversation()
+  return S.getConversation( mongoid )
+
+@app.route('/addmessage/<chatid>', methods=['POST'])
+def add_message(chatid):
+    content = request.get_json(silent=True)
+    return S.addMessage( chatid, content )
