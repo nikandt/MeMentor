@@ -71,6 +71,10 @@ class server:
       convos.extend( achats )
     if (bchats):
       convos.extend( bchats )
+    for chat in convos:
+      chat["userA"] = self.userCollection.users.find_one({"_id": ObjectId(chat["userA"])})
+      chat["userB"] = self.userCollection.users.find_one({"_id": ObjectId(chat["userB"])})
+      chat["messages"] = self.userCollection.messages.find_one({"conversation": str(chat["_id"])})
     return dumps( convos )
 
   def getConversation(self, mongoid):
