@@ -64,6 +64,23 @@ class server:
       ret["messages"].append(self.getMessage(m))
     return dumps(ret)
 
+  def getUserConversation(self, fields):
+    ret = {}
+    ret["A"] = fields["userA"]
+    ret["B"] = fields["userB"]
+    ret["messages"] = []
+    convo = self.userCollection.conversations.find_one({"userA": ret["A"], "userB": ret["B"]})
+    if (not convo):
+        convo = self.userCollection.conversations.find_one({"userA": ret["B"], "userB": ret["A"]})
+    if (convo):
+      for m in convo["messages"]:
+        ret["messages"].append(self.getMessage(m))
+        return dumps(ret)
+
+    else:
+      return self.addConversation(ret)
+
+
   def getMessage(self, messageid):
     return self.userCollection.messages.find_one({"_id": ObjectId(messageid)})
 

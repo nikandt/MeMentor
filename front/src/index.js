@@ -47,6 +47,11 @@ class App extends React.Component {
   }
 
   render() {
+    let selectedNav = this.state.page;
+    if (selectedNav === 'chat') {
+      // lulz hax
+      selectedNav = 'message';
+    }
     return (
       <div>
         {this.renderPage()}
@@ -57,7 +62,7 @@ class App extends React.Component {
             left: 0,
             right: 0
           }}
-          value={this.state.page}
+          value={selectedNav}
           onChange={(event, value) => this.switchPage(value)}
         >
           <BottomNavigationAction value="index" icon={<HomeIcon />} />
