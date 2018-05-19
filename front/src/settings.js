@@ -494,40 +494,10 @@ class Settings extends React.Component {
 
           {this.renderUserInterests()}
 
-          {this.renderSuggestionField()}
-
           {this.renderUserSettings()}
           {this.renderApplicationPreferences()}
         </div>
       </div>
-    );
-  }
-
-  renderSuggestionField() {
-    const { classes } = this.props;
-
-    return (
-      <Autosuggest
-        theme={{
-          container: classes.container,
-          suggestionsContainerOpen: classes.suggestionsContainerOpen,
-          suggestionsList: classes.suggestionsList,
-          suggestion: classes.suggestion
-        }}
-        renderInputComponent={renderInput}
-        suggestions={this.state.suggestions}
-        onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested}
-        onSuggestionsClearRequested={this.handleSuggestionsClearRequested}
-        renderSuggestionsContainer={renderSuggestionsContainer}
-        getSuggestionValue={getSuggestionValue}
-        renderSuggestion={renderSuggestion}
-        inputProps={{
-          classes,
-          placeholder: 'Search a country (start with a)',
-          value: this.state.value,
-          onChange: this.handleChange
-        }}
-      />
     );
   }
 }
