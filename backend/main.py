@@ -63,11 +63,9 @@ def add_user_message():
     content = request.get_json(silent=True)
     return S.addUserMessage( content )
 
-@app.route('/getmatches', methods=['GET'])
-def get_matches():
-    content = request.get_json(silent=True)
-    return S.addUserMessage( content )
-
+@app.route('/getmatches/<userid>', methods=['GET'])
+def get_matches(userid):
+    return S.getMatches( userid )
 
 @app.route('/keywords', methods=['GET'])
 def get_keywords():
