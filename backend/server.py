@@ -77,7 +77,6 @@ class server:
         ret["messages"].append(self.getMessage(m))
       return dumps(ret)
     else:
-      print("new convo")
       return self.addConversation(ret)
 
 
@@ -99,7 +98,27 @@ class server:
     else:
       return ";:<"
 
+  def addUserMessage(self, fields):
+    ret = {}
+    ret["userA"] = fields["userA"]
+    ret["userB"] = fields["userB"]
+    convo = self.userCollection.conversations.find_one({"userA": ret["userA"], "userB": ret["userB"]})
+    if (not convo):
+        convo = self.userCollection.conversations.find_one({"userA": ret["userB"], "userB": ret["userA"]})
+    if (convo):
+      print(convo)
+      messagefields = {
+        "sender": fields['userA'],
+        "conversation": str(convo['_id']),
+        "text": fields['text'],
+        "time": fields['time']
+      }
+      return self.addMessage(str(convo['_id']), messagefields)
+
+    return ";:<"
+
 
   def addSkill(self, name):
     post = {"name": name,}
     return self.userCollection.skills.insert_one(post).inserted_id
+

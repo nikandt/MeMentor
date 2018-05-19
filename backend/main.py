@@ -54,6 +54,12 @@ def add_message(chatid):
     return S.addMessage( chatid, content )
 
 
+@app.route('/addmessage', methods=['POST'])
+def add_user_message():
+    content = request.get_json(silent=True)
+    return S.addUserMessage( content )
+
+
 @app.route('/keywords', methods=['GET'])
 def get_keywords():
     from data.keywords import words
