@@ -22,6 +22,8 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 
+import MenuItem from '@material-ui/core/MenuItem';
+
 import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
 
@@ -65,6 +67,12 @@ const styles = theme => ({
   }
 });
 
+const suggestions = [
+  { label: 'Gardening' },
+  { label: 'Swimming' },
+  { label: 'Skiing' }
+];
+
 function handleClick() {
   alert('You clicked the Chip.'); // eslint-disable-line no-alert
 }
@@ -105,7 +113,7 @@ class Settings extends React.Component {
           addedskill: '',
           addedinterest: '',
           addedphoto: '',
-          password: '********'
+          password: 'jSg9aa33-dies@rjjsf'
         });
       });
     });
@@ -252,6 +260,10 @@ class Settings extends React.Component {
     emailfield.value = '';
   }
 
+  handlePasswordChange() {
+    password.value = '';
+  }
+
   renderUserSettings() {
     const { classes } = this.props;
     return (
@@ -317,6 +329,7 @@ class Settings extends React.Component {
                 type={this.state.showPassword ? 'text' : 'password'}
                 value={this.state.password}
                 // onChange={this.handleChange('password')}
+                onClick={() => this.handlePasswordChange()}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
