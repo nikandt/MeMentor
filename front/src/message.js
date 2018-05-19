@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom';
 import Button from '@material-ui/core/Button';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import RestoreIcon from '@material-ui/icons/Restore';
+import AppBar from '@material-ui/core/AppBar';
+import Typography from '@material-ui/core/Typography';
+import Toolbar from '@material-ui/core/Toolbar';
 
 class Message extends React.Component {
   constructor() {
@@ -13,6 +15,13 @@ class Message extends React.Component {
   render() {
     return (
       <div>
+        <AppBar position="static" color="default">
+          <Toolbar>
+            <Typography variant="title" color="inherit">
+              Messages
+            </Typography>
+          </Toolbar>
+        </AppBar>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet assumenda
         consectetur debitis magnam nobis possimus velit? Atque cumque, debitis
         dolores, dolorum error inventore quia quidem repudiandae tempora vitae
