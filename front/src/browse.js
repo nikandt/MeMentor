@@ -7,6 +7,16 @@ import RestoreIcon from '@material-ui/icons/Restore';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import List from '@material-ui/core/List';
+import Avatar from '@material-ui/core/Avatar';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import CommentIcon from '@material-ui/icons/Comment';
+import IconButton from '@material-ui/core/IconButton';
+import Fade from '@material-ui/core/Fade';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Grid from '@material-ui/core/Grid';
 
 class Browse extends React.Component {
   constructor() {
@@ -30,6 +40,48 @@ class Browse extends React.Component {
       });
   }
 
+  renderUser(user) {
+    return (
+      <ListItem key={user.name} dense button>
+        <Avatar alt={user.name} src={user.imageURL || 'http://zumba.com'} />
+        <ListItemText
+          primary={user.name}
+          secondary={`Knows ${user.skills.join(', ')}`}
+        />
+        <ListItemSecondaryAction>
+          <IconButton aria-label="Message">
+            <CommentIcon />
+          </IconButton>
+        </ListItemSecondaryAction>
+      </ListItem>
+    );
+  }
+
+  renderUsers() {
+    if (this.state.loading) {
+      return (
+        <Fade
+          in={true}
+          style={{
+            transitionDelay: '800ms',
+            position: 'relative'
+          }}
+          unmountOnExit
+        >
+          <CircularProgress style={{ marginLeft: '50%', left: -20, top: 10 }} />
+        </Fade>
+      );
+    } else if (this.state.users.length > 0) {
+      return <List>{this.state.users.map(this.renderUser)}</List>;
+    } else {
+      return (
+        <Typography variant="body1" color="inherit">
+          You have no matches. Please purchase our premium subscription
+        </Typography>
+      );
+    }
+  }
+
   render() {
     return (
       <div>
@@ -40,7 +92,11 @@ class Browse extends React.Component {
             </Typography>
           </Toolbar>
         </AppBar>
-        {this.state.users.map(user => <div>{user.name}</div>)}
+        <Grid container spacing={24}>
+          <Grid item xs={12}>
+            {this.renderUsers()}
+          </Grid>
+        </Grid>
       </div>
     );
   }
