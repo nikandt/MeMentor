@@ -10,13 +10,20 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Chip from '@material-ui/core/Chip';
+import DoneIcon from '@material-ui/icons/Done';
+import Avatar from '@material-ui/core/Avatar';
 
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 const styles = theme => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
+    justifyContent: 'center'
   },
   container: {
     display: 'flex',
@@ -27,10 +34,24 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
     width: 200
   },
+  withoutLabel: {
+    marginTop: theme.spacing.unit * 3
+  },
   input: {
     display: 'none'
+  },
+  chip: {
+    margin: theme.spacing.unit
   }
 });
+
+function handleClick() {
+  alert('You clicked the Chip.'); // eslint-disable-line no-alert
+}
+
+function handleDelete() {
+  alert('You deleted the Chip.'); // eslint-disable-line no-alert
+}
 
 class Settings extends React.Component {
   constructor() {
@@ -40,11 +61,8 @@ class Settings extends React.Component {
   /*state = {
     username: '',
     password: '',
-    email: ''
-  };*/
-
-  /*handleChange = prop => event => {
-    this.setState({ [prop]: event.target.value });
+    email: '',
+    showPassword: false
   };*/
 
   render() {
@@ -66,7 +84,7 @@ class Settings extends React.Component {
           </Typography>
           <input
             accept="image/*"
-            className="input"
+            className={classes.input}
             id="button-file"
             multiple
             type="file"
@@ -82,7 +100,7 @@ class Settings extends React.Component {
               id="margin-none"
               defaultValue="John"
               className="container"
-              /* onChange={this.handleNameChange('username')}*/
+              /* onChange={handleChange('username')}*/
             />
 
             <TextField
@@ -92,18 +110,88 @@ class Settings extends React.Component {
               className="container"
             />
           </p>
+          <br />
+          <Typography variant="title" gutterBottom>
+            Learning interests
+          </Typography>
+          <Chip
+            avatar={
+              <Avatar>
+                <DoneIcon />
+              </Avatar>
+            }
+            label="Gardening"
+            onClick={handleClick}
+            onDelete={handleDelete}
+            className={classes.chip}
+          />
+          <br />
+          <InputLabel htmlFor="input-with-icon-adornment">
+            Add interest
+          </InputLabel>
+          <Input id="input-with-icon-adornment2" />
+          <br />
+          <br />
+          <Typography variant="title" gutterBottom>
+            Teaching interests
+          </Typography>
+          <Chip
+            avatar={
+              <Avatar>
+                <DoneIcon />
+              </Avatar>
+            }
+            label="Scala"
+            onClick={handleClick}
+            onDelete={handleDelete}
+            className={classes.chip}
+          />
+          <Chip
+            avatar={
+              <Avatar>
+                <DoneIcon />
+              </Avatar>
+            }
+            label="Python"
+            onClick={handleClick}
+            onDelete={handleDelete}
+            className={classes.chip}
+          />
+          <br />
+          <InputLabel htmlFor="input-with-icon-adornment">
+            Add interest
+          </InputLabel>
+          <Input id="input-with-icon-adornment" />
         </div>
       </div>
     );
   }
 }
 
+// TODO: round image container for this page as well
 /*
-
-          <Typography variant="title" gutterBottom>
-            App preferences
-          </Typography>
-          <p>Set location on</p>
+          <FormControl
+            className={classNames(classes.margin, classes.textField)}
+          >
+            <InputLabel htmlFor="password">Password</InputLabel>
+            <Input
+              id="password"
+              type={this.showPassword ? 'text' : 'password'}
+              value={this.password}
+              onChange={this.handleChange('password')}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="Toggle password visibility"
+                    onClick={this.handleClickShowPassword}
+                    onMouseDown={this.handleMouseDownPassword}
+                  >
+                    {this.showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
 */
 
 Settings.propTypes = {
