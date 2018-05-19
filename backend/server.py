@@ -54,11 +54,15 @@ class server:
   def getAllConversations(self):
     return dumps( self.userCollection.conversations.find() )
 
-  def getConversations(self):
-    return dumps( self.userCollection.conversations.find() )
+  def getConversations(self, userid):
+    convos = []
+    convos.extend( self.userCollection.conversations.find_one({"userA": userid}) )
+    convos.extend( self.userCollection.conversations.find_one({"userB": userid}) )
+    return dumps( convos )
 
   def getConversation(self, mongoid):
     ret = {}
+    print(mongoid)
     convo = self.userCollection.conversations.find_one({"_id": ObjectId(mongoid)})
     ret["userA"] = convo["userA"]
     ret["userB"] = convo["userB"]
