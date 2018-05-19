@@ -22,6 +22,8 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 
+import MenuItem from '@material-ui/core/MenuItem';
+
 import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
 
@@ -65,6 +67,12 @@ const styles = theme => ({
   }
 });
 
+const suggestions = [
+  { label: 'Gardening' },
+  { label: 'Swimming' },
+  { label: 'Skiing' }
+];
+
 function handleClick() {
   alert('You clicked the Chip.'); // eslint-disable-line no-alert
 }
@@ -103,7 +111,9 @@ class Settings extends React.Component {
           skills: obj.skills,
           imageurl: obj.imageURL,
           addedskill: '',
-          addedinterest: ''
+          addedinterest: '',
+          addedphoto: '',
+          password: 'jSg9aa33-dies@rjjsf'
         });
       });
     });
@@ -202,7 +212,7 @@ class Settings extends React.Component {
 
   renderTopbar() {
     return (
-      <AppBar position="static" color="default">
+      <AppBar position="static" color="primary">
         <Toolbar>
           <Typography variant="title" color="inherit">
             Settings
@@ -210,6 +220,48 @@ class Settings extends React.Component {
         </Toolbar>
       </AppBar>
     );
+  }
+
+  handlePhotoChange(event) {
+    if (event.target.value) {
+      this.setState({ addedphoto: event.target.value });
+      console.log('New photo url:', event.target.value);
+
+      this.setState({ imageurl: event.target.value });
+
+      // TODO: files on backend?
+      /* const data = { imageURL: event.target.value };
+
+      console.log(data);
+      var URL = 'http://localhost:5000/updateuser/' + this.state.userid;
+      console.log(URL);
+
+      fetch(URL, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        })
+      })
+        .then(response => {
+          return response.json();
+        })
+        .catch(error => console.error('Error:', error))
+        .then(response => console.log('Success:', response))
+        .then(this.setState({ imageurl: event.target.value }));*/
+    }
+  }
+
+  handleNameChange() {
+    namefield.value = '';
+  }
+
+  handleEmailChange() {
+    emailfield.value = '';
+  }
+
+  handlePasswordChange() {
+    password.value = '';
   }
 
   renderUserSettings() {
@@ -238,6 +290,7 @@ class Settings extends React.Component {
               id="button-file"
               multiple
               type="file"
+              onChange={event => this.handlePhotoChange(event)}
             />
             <label htmlFor="button-file">
               <Button variant="raised" component="span" className="photos">
@@ -251,16 +304,20 @@ class Settings extends React.Component {
               className={classNames(classes.margin, classes.textField)}
             >
               <TextField
-                label="Username"
-                id="margin-none"
+                label="Name"
+                id="namefield"
                 defaultValue={this.state.name}
                 className="container"
-                /* onChange={handleChange('username')}*/
+                value={this.state.name}
+                onClick={() => this.handleNameChange()}
               />
               <TextField
                 label="E-mail"
+                id="emailfield"
                 defaultValue={this.state.email}
                 className="container"
+                value={this.state.email}
+                onClick={() => this.handleEmailChange()}
               />
             </FormControl>
             <FormControl
@@ -272,6 +329,7 @@ class Settings extends React.Component {
                 type={this.state.showPassword ? 'text' : 'password'}
                 value={this.state.password}
                 // onChange={this.handleChange('password')}
+                onClick={() => this.handlePasswordChange()}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
