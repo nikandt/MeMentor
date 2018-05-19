@@ -10,5 +10,4 @@ class model:
     return entry.keys() < self.checks.keys()
 
   def checkDict(self, entry):
-    print(self.checks, ":_____________:", entry)
     return all ( k in entry for k in self.checks.keys() ) and all( self.checks[k](entry[k]) for k in entry)

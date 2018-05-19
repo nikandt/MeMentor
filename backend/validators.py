@@ -4,6 +4,9 @@ def stringcheck(name):
 def emailCheck(email):
   return isinstance(email, str) and "@" in email and "." in email
 
+def floatcheck(f):
+  return isinstance(f, float)
+
 def coordinateCheck(coords):
   return (not isinstance(coords, str)) and all( isinstance(coord, float) for coord in coords ) and len(coords) == 2
 

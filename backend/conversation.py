@@ -17,6 +17,9 @@ class conversation:
 
 class message(model):
   def __init__(self, sender, text):
-    self.sender = sender
-    self.text = text
-    self.time = time()
+    self.checks = {
+      "sender": stringcheck,
+      "conversation": stringcheck,
+      "text": stringcheck,
+      "time": floatcheck,
+    }
