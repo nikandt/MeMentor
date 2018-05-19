@@ -26,6 +26,9 @@ def update_user(mongoid):
 def get_users():
   return S.getUsers()
 
+@app.route('/getuser/<mongoid>', methods=['GET'])
+def get_user(mongoid):
+    return S.getUser( mongoid )
 
 @app.route('/addconversation', methods=['POST'])
 def add_conversation():

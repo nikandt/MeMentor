@@ -39,6 +39,9 @@ class server:
   def getUsers(self):
     return dumps( self.userCollection.users.find() )
 
+  def getUser(self, mongoid):
+    return dumps(self.userCollection.users.find_one({"_id": ObjectId(mongoid)}))
+
   def addConversation(self, fields):
     newconversation = conversation()
     if (newconversation.checkDict(fields)):
@@ -52,7 +55,18 @@ class server:
     return dumps( self.userCollection.conversations.find() )
 
   def getConversation(self, mongoid):
-    return dumps( self.userCollection.conversations.find() )
+    ret = {}
+    convo = self.userCollection.conversations.find_one({"_id": ObjectId(mongoid)})
+    ret["A"] = convo["userA"]
+    ret["B"] = convo["userB"]
+    ret["messages"] = []
+    for m in convo["messages"]:
+      ret["messages"].append(self.getMessage(m))
+    return dumps(ret)
+
+  def getMessage(self, messageid):
+    return self.userCollection.messages.find_one({"_id": ObjectId(messageid)})
+
 
   def addMessage(self, chatid, fields):
     newmessage = message()
