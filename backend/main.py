@@ -43,6 +43,11 @@ def get_conversations():
 def get_conversation(mongoid):
   return S.getConversation( mongoid )
 
+@app.route("/getconversation/", methods=['GET'])
+def get_user_conversation():
+  content = request.get_json(silent=True)
+  return S.getUserConversation(content)
+
 @app.route('/addmessage/<chatid>', methods=['POST'])
 def add_message(chatid):
     content = request.get_json(silent=True)
