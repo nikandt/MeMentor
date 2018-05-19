@@ -43,7 +43,7 @@ def get_conversations():
 def get_conversation(mongoid):
   return S.getConversation( mongoid )
 
-@app.route("/getconversation/", methods=['GET'])
+@app.route("/getconversation/", methods=['POST'])
 def get_user_conversation():
   content = request.get_json(silent=True)
   return S.getUserConversation(content)
