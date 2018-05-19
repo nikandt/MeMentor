@@ -143,6 +143,7 @@ class Browse extends React.Component {
             </Typography>
           </Toolbar>
         </AppBar>
+        <br />
         <Grid container spacing={24}>
           <Grid item xs={12}>
             {this.renderUsers()}
