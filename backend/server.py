@@ -31,6 +31,8 @@ class server:
     if (userModel.checkField(new)):
       old = self.userCollection.users.find_one({ "_id": ObjectId(mongoid) })
       fields = {**old, **new}
+      fields["skills"] = list(set(fields["skills"]))
+      fields["interests"] = list(set(fields["interests"]))
       self.userCollection.users.update({ "_id": ObjectId(mongoid) },fields)
       return "jee"
     else:
