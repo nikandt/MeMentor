@@ -10,13 +10,20 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Chip from '@material-ui/core/Chip';
+import DoneIcon from '@material-ui/icons/Done';
+import Avatar from '@material-ui/core/Avatar';
 
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 const styles = theme => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
+    justifyContent: 'center'
   },
   container: {
     display: 'flex',
@@ -27,10 +34,24 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
     width: 200
   },
+  withoutLabel: {
+    marginTop: theme.spacing.unit * 3
+  },
   input: {
     display: 'none'
+  },
+  chip: {
+    margin: theme.spacing.unit
   }
 });
+
+function handleClick() {
+  alert('You clicked the Chip.'); // eslint-disable-line no-alert
+}
+
+function handleDelete() {
+  alert('You deleted the Chip.'); // eslint-disable-line no-alert
+}
 
 class Settings extends React.Component {
   constructor() {
@@ -40,15 +61,15 @@ class Settings extends React.Component {
   /*state = {
     username: '',
     password: '',
-    email: ''
-  };*/
-
-  /*handleChange = prop => event => {
-    this.setState({ [prop]: event.target.value });
+    email: '',
+    showPassword: false
   };*/
 
   render() {
     const { classes } = this.props;
+    const { username } = 'johndoe';
+    const imageurl =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAMFBMVEXd3N3////8/Pzg3+D5+fn29vbn5+fz8/Pv7+/i4eLs7Ozk5OTq6erv7u/h4eHp6OnBybNdAAAEVElEQVR4nO2d3ZKqQAyEFRBFFN//bZc5SIHKrpDppHOofDfe0pXpJPPr4RAEQRAEQRAEQRAEQRAEQRAEQRAEQWBI19U9bVeyP0RM2dzup6LnmOh/q8u9/e/klI9zdVygOF0b9retp6zPxZKKJ9W9Y3/hKrr7XyoGzi37K7/Snr+qGMJyc22X8r5ORuLkOCq374PqZYA5DUpz2iSjp3iwv3mJels4nkFhf/UHW9wxp/LmlJXJ6pPCVVFpFsv4Sm7sr59oc3Qcj1f29480Eps7VFLmxSPhIw2LfT7hwvEAHb0SfnN/Q+joOy92u9LmGn3kwtUBMPqToqYKuaJ09M0Kc3BlV5A5d6IQSMYaKXghqZE6mD395pnUF1gtPTggvJBAHZIguaRD62BVRWANGakoQmBFfQajvLcKOih2VxhZvd0JQjRGFqOUlCo6CNP3h46Qk7kQeDUcsK+J6D5rxHwZQsfr9m5vlHSYT6/UhFi3W/AWfsS6tu9GyEVLiHWTEkJCiBLCvU9/QnaTtXYjJFoUb0J20/3uZz6iVEjsZ4hKact+YWs3qyhKJiHst6usNDJWsWE77HMo+woalYSy+bab/ZESP7ZIB7fgcxLGpkICvtVD22gHl5KCdnQWnIGJJ52gLiGeRcGeDqKeNQUdBEzY71XNKWF+5zl9ADa46IeYQZuiDu5fQDIX9UDjCGD2XvHPLx8QhmcbfST78C/3yO+MrHswx8LRTZic0eVlXD0RO96Hz2dcZZXx5E2HsKcn31FYptx8YMjdJcSRelP2Ki4eyvkvbLh2fPbnjol6w+g6uymD73TXjXWxunq47PbO2qcF3sLize6N+IijK6vIouEuKs2fj4esoPARFWFv8iqFPmM/tKBlFPabHBfYCl3BbLvyJlTv8Bp6hDvmkJxSKpx9YLSRuMXSOfa3wVU2p4/2M3jRszTrlJg2xVrx+KfEMCYbX23aqsRsnUvlFMocozSsrsNIiaY/Rix8opevXpSo5y4bHfpKOiMd2q/w6PQly6h2K4Y6VDfeDRLvHLUkbJF452glYYUTc9+U6NhE6ZrxX6gcIwCen1mPQv9oP7ASCoPLNPNOwHMwZWAl0INL6wLPV8BnmgkZawSauaBnFzcCffmQGBBoSNRuT64DNzWhOX0A5ndyQHAhIdXCCVBVpAcEFRKyQxIQl6g8CLYVxBSLWkNGALWEWdQnAOXdeMHhN/IXIlwEBHCPzIXVE7l2d2H1RKbdfVg9kWl32gz3k7w5L73NmshquDhrQMtkrQw5Gll5Y8tNzkpk5C1PIytrbLmphgPymqj2GpgM+Rk7R8k3IU7AviySYRIHk/VXpFN3ZxaRm8RVFUlIK4kzi4hnV0rvNeUgc7s7r0vd7mTZYY5sCcKd16Vud7BU+o5o6RT3z044RA8R+Fl3mBCtQDjr4QcknbzD7CvLv67m6yOSebva08Q5SJ5sdVhGZIVkN0KczXMHfp/t/gDySEhntCfiZwAAAABJRU5ErkJggg==';
 
     return (
       <div>
@@ -64,9 +85,10 @@ class Settings extends React.Component {
           <Typography variant="title" gutterBottom>
             User settings
           </Typography>
+          <Avatar alt={username} src={imageurl} />
           <input
             accept="image/*"
-            className="input"
+            className={classes.input}
             id="button-file"
             multiple
             type="file"
@@ -82,7 +104,7 @@ class Settings extends React.Component {
               id="margin-none"
               defaultValue="John"
               className="container"
-              /* onChange={this.handleNameChange('username')}*/
+              /* onChange={handleChange('username')}*/
             />
 
             <TextField
@@ -92,18 +114,88 @@ class Settings extends React.Component {
               className="container"
             />
           </p>
+          <br />
+          <Typography variant="title" gutterBottom>
+            Learning interests
+          </Typography>
+          <Chip
+            avatar={
+              <Avatar>
+                <DoneIcon />
+              </Avatar>
+            }
+            label="Gardening"
+            onClick={handleClick}
+            onDelete={handleDelete}
+            className={classes.chip}
+          />
+          <br />
+          <InputLabel htmlFor="input-with-icon-adornment">
+            Add interest
+          </InputLabel>
+          <Input id="input-with-icon-adornment2" />
+          <br />
+          <br />
+          <Typography variant="title" gutterBottom>
+            Teaching interests
+          </Typography>
+          <Chip
+            avatar={
+              <Avatar>
+                <DoneIcon />
+              </Avatar>
+            }
+            label="Scala"
+            onClick={handleClick}
+            onDelete={handleDelete}
+            className={classes.chip}
+          />
+          <Chip
+            avatar={
+              <Avatar>
+                <DoneIcon />
+              </Avatar>
+            }
+            label="Python"
+            onClick={handleClick}
+            onDelete={handleDelete}
+            className={classes.chip}
+          />
+          <br />
+          <InputLabel htmlFor="input-with-icon-adornment">
+            Add interest
+          </InputLabel>
+          <Input id="input-with-icon-adornment" />
         </div>
       </div>
     );
   }
 }
 
+// TODO: round image container for this page as well
 /*
-
-          <Typography variant="title" gutterBottom>
-            App preferences
-          </Typography>
-          <p>Set location on</p>
+          <FormControl
+            className={classNames(classes.margin, classes.textField)}
+          >
+            <InputLabel htmlFor="password">Password</InputLabel>
+            <Input
+              id="password"
+              type={this.showPassword ? 'text' : 'password'}
+              value={this.password}
+              onChange={this.handleChange('password')}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="Toggle password visibility"
+                    onClick={this.handleClickShowPassword}
+                    onMouseDown={this.handleMouseDownPassword}
+                  >
+                    {this.showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
 */
 
 Settings.propTypes = {
