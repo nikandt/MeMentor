@@ -35,6 +35,10 @@ def add_conversation():
     content = request.get_json(silent=True)
     return S.addConversation( content )
 
+@app.route("/getallconversations", methods=['GET'])
+def get_all_conversations():
+  return S.getAllConversations()
+
 @app.route("/getconversations", methods=['GET'])
 def get_conversations():
   return S.getConversations()
@@ -46,16 +50,20 @@ def get_conversation(mongoid):
 @app.route("/getconversation", methods=['POST'])
 def get_user_conversation():
   content = request.get_json(silent=True)
-  return S.getUserConversation(content)
+  return S.getConversation(content)
 
 @app.route('/addmessage/<chatid>', methods=['POST'])
 def add_message(chatid):
     content = request.get_json(silent=True)
     return S.addMessage( chatid, content )
 
-
 @app.route('/addmessage', methods=['POST'])
 def add_user_message():
+    content = request.get_json(silent=True)
+    return S.addUserMessage( content )
+
+@app.route('/getmatches', methods=['GET'])
+def get_matches():
     content = request.get_json(silent=True)
     return S.addUserMessage( content )
 

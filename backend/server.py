@@ -51,6 +51,9 @@ class server:
     else:
       return ";:<"
 
+  def getAllConversations(self):
+    return dumps( self.userCollection.conversations.find() )
+
   def getConversations(self):
     return dumps( self.userCollection.conversations.find() )
 
