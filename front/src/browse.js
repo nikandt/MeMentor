@@ -21,8 +21,8 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 
 class Browse extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       loading: true,
       users: [],
@@ -55,7 +55,7 @@ class Browse extends React.Component {
           {user.name}
 
           <IconButton aria-label="Message">
-            <CommentIcon />
+            <CommentIcon onClick={() => this.props.onOpenChat(user._id.$oid)} />
           </IconButton>
         </Typography>
         <Typography variant="title" color="inherit">
