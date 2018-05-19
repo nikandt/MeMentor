@@ -54,7 +54,13 @@ class server:
       return ";:<"
 
   def getAllConversations(self):
-    return dumps( self.userCollection.conversations.find() )
+    c = list( self.userCollection.conversations.find() )
+
+    for chat in c:
+      chat["userA"] = self.userCollection.users.find_one({"_id": ObjectId(chat["userA"])})
+      chat["userB"] = self.userCollection.users.find_one({"_id": ObjectId(chat["userB"])})
+      chat["messages"] = self.userCollection.messages.find_one({"conversation": str(chat["_id"])})
+    return dumps( c )
 
   def getConversations(self, fields):
     convos = []

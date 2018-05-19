@@ -43,18 +43,24 @@ class Message extends React.Component {
   }
 
   renderConversation(conv) {
-    const otherUser = conv.userB === MYID ? conv.userA : conv.userB;
+    const otherUser = conv.userB._id.$oid === MYID ? conv.userA : conv.userB;
+    let messageText = conv.messages && conv.messages.text;
+    if (messageText) {
+      messageText =
+        (conv.messages.sender === MYID ? 'You: ' : otherUser.name + ': ') +
+        messageText;
+    }
     return (
       <ListItem
-        key={otherUser}
+        key={otherUser._id.$oid}
         button
-        onClick={() => this.props.onOpenChat(otherUser)}
+        onClick={() => this.props.onOpenChat(otherUser._id.$oid)}
       >
         <Avatar
-          alt={otherUser}
-          src={otherUser /*.imageURL*/ || 'http://zumba.com'}
+          alt={otherUser.name}
+          src={otherUser.imageURL || 'http://zumba.com'}
         />
-        <ListItemText primary={otherUser} secondary={conv.messages[0]} />
+        <ListItemText primary={otherUser.name} secondary={messageText} />
       </ListItem>
     );
   }
