@@ -19,6 +19,26 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import { withStyles } from '@material-ui/core/styles';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+
+const styles = theme => ({
+  avatar: {
+    marginTop: 20,
+    marginBottom: 5,
+    width: '100%',
+    height: 'auto',
+    [theme.breakpoints.up('md')]: {
+      transform: 'translate(-50%,-50%)',
+      top: '50%',
+      left: '50%',
+      width: 300,
+      maxHeight: 300,
+      maxWidth: 300
+    }
+  }
+});
 
 class Browse extends React.Component {
   constructor(props) {
@@ -48,17 +68,13 @@ class Browse extends React.Component {
   }
 
   renderUser(user) {
+    const { classes } = this.props;
     return (
       <div style={{ height: 'calc(100vh - 70px)' }}>
         <Avatar
           alt={user.name}
           src={user.imageURL || 'http://zumba.com'}
-          style={{
-            marginTop: 20,
-            marginBottom: 5,
-            width: '100%',
-            height: 'auto'
-          }}
+          className={classes.avatar}
         />
         <br />
         <Typography
@@ -165,4 +181,8 @@ class Browse extends React.Component {
   }
 }
 
-export default Browse;
+Browse.propTypes = {
+  classes: PropTypes.object.isRequired
+};
+
+export default withStyles(styles)(Browse);
