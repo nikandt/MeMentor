@@ -154,7 +154,7 @@ class Browse extends React.Component {
     } else {
       return (
         <Typography variant="body1" color="inherit">
-          You have no matches. Please purchase our premium subscription
+          You have no matches. Add more interests!
         </Typography>
       );
     }

@@ -33,10 +33,6 @@ import Grid from '@material-ui/core/Grid';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
-import Autosuggest from 'react-autosuggest';
-import match from 'autosuggest-highlight/match';
-import parse from 'autosuggest-highlight/parse';
-
 const styles = theme => ({
   root: {
     flexGrow: 1,
