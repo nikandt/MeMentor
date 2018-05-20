@@ -33,8 +33,8 @@ class Browse extends React.Component {
   componentDidMount() {
     const fetchAll = location.hash.indexOf('fetch_all') !== -1;
     const url = fetchAll
-      ? 'http://localhost:5000/getusers'
-      : `http://localhost:5000/getmatches/${this.props.userId}`;
+      ? '/api/getusers'
+      : `/api/getmatches/${this.props.userId}`;
     fetch(url)
       .then(response => {
         return response.json();

@@ -99,7 +99,7 @@ class Settings extends React.Component {
   }
 
   getUser(userid) {
-    return fetch('http://localhost:5000/getuser/' + userid).then(response => {
+    return fetch('/api/getuser/' + userid).then(response => {
       return response.json().then(obj => {
         this.setState({
           email: obj.email,
@@ -129,7 +129,7 @@ class Settings extends React.Component {
     const data = { skills: _skills };
 
     console.log(data);
-    var URL = 'http://localhost:5000/updateuser/' + this.props.userId;
+    var URL = '/api/updateuser/' + this.props.userId;
     console.log(URL);
 
     fetch(URL, {
@@ -152,7 +152,7 @@ class Settings extends React.Component {
     var skillset = this.state.skills.filter(e => e !== skillname);
     const data = { skills: skillset };
 
-    fetch('http://localhost:5000/updateuser/' + this.props.userId, {
+    fetch('/api/updateuser/' + this.props.userId, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: new Headers({
@@ -178,7 +178,7 @@ class Settings extends React.Component {
     const data = { interests: _i };
 
     console.log(data);
-    var URL = 'http://localhost:5000/updateuser/' + this.props.userId;
+    var URL = '/api/updateuser/' + this.props.userId;
     console.log(URL);
 
     fetch(URL, {
@@ -232,7 +232,7 @@ class Settings extends React.Component {
       /* const data = { imageURL: event.target.value };
 
       console.log(data);
-      var URL = 'http://localhost:5000/updateuser/' + this.props.userId;
+      var URL = '/api/updateuser/' + this.props.userId;
       console.log(URL);
 
       fetch(URL, {
@@ -357,7 +357,7 @@ class Settings extends React.Component {
     var interestset = this.state.interests.filter(e => e !== interestname);
     const data = { interests: interestset };
 
-    fetch('http://localhost:5000/updateuser/' + this.props.userId, {
+    fetch('/api/updateuser/' + this.props.userId, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: new Headers({

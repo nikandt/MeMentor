@@ -39,7 +39,7 @@ class Chat extends React.Component {
   }
 
   tick() {
-    fetch('http://localhost:5000/getconversation', {
+    fetch('/api/getconversation', {
       method: 'POST',
       body: JSON.stringify({
         userA: this.props.userId,
@@ -58,6 +58,7 @@ class Chat extends React.Component {
         const other =
           this.props.userId === obj.userA._id.$oid ? obj.userB : obj.userA;
         this.setState({
+          loading: true,
           messages: obj.messages,
           me: me,
           other: other
@@ -90,6 +91,12 @@ class Chat extends React.Component {
           <Toolbar>
             <Typography variant="title" color="inherit">
               Chat with {this.state.other && this.state.other.name}
+              {this.state.loading && (
+                <CircularProgress
+                  size={20}
+                  style={{ display: 'inline-block' }}
+                />
+              )}
             </Typography>
           </Toolbar>
         </AppBar>
@@ -112,7 +119,7 @@ class Chat extends React.Component {
           value={this.state.chatText}
           onKeyDown={event => {
             if (event.key === 'Enter') {
-              fetch('http://localhost:5000/addmessage', {
+              fetch('/api/addmessage', {
                 method: 'POST',
                 body: JSON.stringify({
                   userA: this.props.userId,

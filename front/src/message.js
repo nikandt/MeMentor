@@ -28,18 +28,22 @@ class Message extends React.Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:5000/getallconversations')
+    fetch('/api/getconversations', {
+      method: 'POST',
+      body: JSON.stringify({
+        userA: this.props.userId
+      }),
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    })
       .then(response => {
         return response.json();
       })
       .then(obj => {
         this.setState({
           loading: false,
-          conversations: obj.filter(
-            c =>
-              c.userA._id.$oid === this.props.userId ||
-              c.userB._id.$oid === this.props.userId
-          )
+          conversations: obj
         });
       });
   }
