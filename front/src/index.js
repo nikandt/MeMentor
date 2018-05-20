@@ -8,6 +8,11 @@ import MessageIcon from '@material-ui/icons/Message';
 import SettingsIcon from '@material-ui/icons/Settings';
 import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
+import List from '@material-ui/core/List';
+import Avatar from '@material-ui/core/Avatar';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import AppBar from '@material-ui/core/AppBar';
 import Settings from './settings';
 import Message from './message';
 import Browse from './browse';
@@ -18,7 +23,7 @@ class App extends React.Component {
     super();
     this.state = {
       page: 'index',
-      userId: '5affcc26afdada4e1c475ee9'
+      userId: localStorage.getItem('userId')
     };
   }
 
@@ -59,7 +64,7 @@ class App extends React.Component {
     this.setState({ page: value });
   }
 
-  render() {
+  renderLoggedIn() {
     let selectedNav = this.state.page;
     if (selectedNav === 'chat') {
       // lulz hax
@@ -85,9 +90,71 @@ class App extends React.Component {
       </div>
     );
   }
+
+  render() {
+    if (this.state.userId === null) {
+      return (
+        <Login
+          onLogin={userId => {
+            this.setState({ userId });
+            localStorage.setItem('userId', userId);
+          }}
+        />
+      );
+    } else {
+      return this.renderLoggedIn();
+    }
+  }
+}
+
+class Login extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      users: []
+    };
+  }
+  componentDidMount() {
+    const url = '/api/getusers';
+    fetch(url)
+      .then(response => {
+        return response.json();
+      })
+      .then(obj => {
+        this.setState({
+          loading: false,
+          users: obj
+        });
+      });
+  }
+  render() {
+    return (
+      <div>
+        <AppBar position="static" color="default">
+          <Toolbar>
+            <Typography variant="title" color="inherit">
+              Login
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <List>
+          {this.state.users.map(u => (
+            <ListItem
+              button
+              onClick={this.props.onLogin.bind(this, u._id.$oid)}
+            >
+              <Avatar src={u.imageURL} />
+              <ListItemText primary={u.name} />
+            </ListItem>
+          ))}
+        </List>
+      </div>
+    );
+  }
 }
 
 const app = ReactDOM.render(<App />, document.querySelector('#app'));
 window.changeUser = user => {
   app.setState({ userId: user });
+  localStorage.setItem('userId', user);
 };
