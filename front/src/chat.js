@@ -18,7 +18,6 @@ import Fade from '@material-ui/core/Fade';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import { MYID } from './message';
 
 class Chat extends React.Component {
   constructor(props) {
@@ -40,11 +39,11 @@ class Chat extends React.Component {
   }
 
   tick() {
-    fetch('http://localhost:5000/getconversation', {
+    fetch('/api/getconversation', {
       method: 'POST',
       body: JSON.stringify({
-        userA: MYID,
-        userB: this.props.userId
+        userA: this.props.userId,
+        userB: this.props.partnerId
       }),
       headers: new Headers({
         'Content-Type': 'application/json'
@@ -54,9 +53,12 @@ class Chat extends React.Component {
         return response.json();
       })
       .then(obj => {
-        const me = MYID === obj.userA._id.$oid ? obj.userA : obj.userB;
-        const other = MYID === obj.userA._id.$oid ? obj.userB : obj.userA;
+        const me =
+          this.props.userId === obj.userA._id.$oid ? obj.userA : obj.userB;
+        const other =
+          this.props.userId === obj.userA._id.$oid ? obj.userB : obj.userA;
         this.setState({
+          loading: true,
           messages: obj.messages,
           me: me,
           other: other
@@ -89,6 +91,12 @@ class Chat extends React.Component {
           <Toolbar>
             <Typography variant="title" color="inherit">
               Chat with {this.state.other && this.state.other.name}
+              {this.state.loading && (
+                <CircularProgress
+                  size={20}
+                  style={{ display: 'inline-block' }}
+                />
+              )}
             </Typography>
           </Toolbar>
         </AppBar>
@@ -111,11 +119,11 @@ class Chat extends React.Component {
           value={this.state.chatText}
           onKeyDown={event => {
             if (event.key === 'Enter') {
-              fetch('http://localhost:5000/addmessage', {
+              fetch('/api/addmessage', {
                 method: 'POST',
                 body: JSON.stringify({
-                  userA: MYID,
-                  userB: this.props.userId,
+                  userA: this.props.userId,
+                  userB: this.props.partnerId,
                   time: 420,
                   text: event.target.value
                 }),

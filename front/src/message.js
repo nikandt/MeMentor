@@ -18,8 +18,6 @@ import Fade from '@material-ui/core/Fade';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 
-export const MYID = '5affcc26afdada4e1c475ee9';
-
 class Message extends React.Component {
   constructor(props) {
     super(props);
@@ -30,7 +28,15 @@ class Message extends React.Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:5000/getallconversations')
+    fetch('/api/getconversations', {
+      method: 'POST',
+      body: JSON.stringify({
+        userA: this.props.userId
+      }),
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    })
       .then(response => {
         return response.json();
       })
@@ -43,12 +49,14 @@ class Message extends React.Component {
   }
 
   renderConversation(conv) {
-    const otherUser = conv.userB._id.$oid === MYID ? conv.userA : conv.userB;
+    const otherUser =
+      conv.userB._id.$oid === this.props.userId ? conv.userA : conv.userB;
     let messageText = conv.messages && conv.messages.text;
     if (messageText) {
       messageText =
-        (conv.messages.sender === MYID ? 'You: ' : otherUser.name + ': ') +
-        messageText;
+        (conv.messages.sender === this.props.userId
+          ? 'You: '
+          : otherUser.name + ': ') + messageText;
     }
     return (
       <ListItem

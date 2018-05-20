@@ -17,7 +17,8 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      page: 'index'
+      page: 'index',
+      userId: '5affcc26afdada4e1c475ee9'
     };
   }
 
@@ -32,13 +33,25 @@ class App extends React.Component {
 
   renderPage() {
     if (this.state.page === 'index') {
-      return <Browse onOpenChat={userId => this.openChat(userId)} />;
+      return (
+        <Browse
+          userId={this.state.userId}
+          onOpenChat={userId => this.openChat(userId)}
+        />
+      );
     } else if (this.state.page === 'message') {
-      return <Message onOpenChat={userId => this.openChat(userId)} />;
+      return (
+        <Message
+          userId={this.state.userId}
+          onOpenChat={userId => this.openChat(userId)}
+        />
+      );
     } else if (this.state.page === 'chat') {
-      return <Chat userId={this.state.chatPartner} />;
+      return (
+        <Chat userId={this.state.userId} partnerId={this.state.chatPartner} />
+      );
     } else {
-      return <Settings />;
+      return <Settings userId={this.state.userId} />;
     }
   }
 
@@ -74,4 +87,7 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, document.querySelector('#app'));
+const app = ReactDOM.render(<App />, document.querySelector('#app'));
+window.changeUser = user => {
+  app.setState({ userId: user });
+};
